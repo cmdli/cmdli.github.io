@@ -1,7 +1,10 @@
 body {
-    text-align: center;
     font-family: verdana, sans-serif;
 }
-/*p {
-	font-size: small;
-}*/
+p {
+	margin:0 0 10px;
+}
+.wrapper {
+	width:430px;
+	margin:0 auto;
+}
