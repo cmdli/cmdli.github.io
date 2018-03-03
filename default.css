@@ -1,10 +1,12 @@
 body {
-    font-family: verdana, sans-serif;
+  font-family: verdana, sans-serif;
+  max-width: 30em;
+	margin:1em auto;
+	padding:0 .62em;
 }
 p {
 	margin:0 0 10px;
 }
-.wrapper {
-	width:430px;
-	margin:0 auto;
+h1,h2,h3,h4,h5 {
+	line-height: 1.2;
 }
