@@ -1,0 +1,40 @@
+body {
+  background-color: whitesmoke;
+}
+
+.world {
+  display: flex;
+  flex-direction: column;
+}
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 20px;
+  height: 20px;
+}
+
+.ground {
+  background-color: #5f3d1d;
+}
+
+.tree {
+  background-color: green;
+}
+
+.rabbit {
+  background-color: gray;
+}
+
+.wolf {
+  background-color: black;
+}
+
+.water {
+  background-color: blue;
+}
+
+.food {
+  background-color: pink;
+}
