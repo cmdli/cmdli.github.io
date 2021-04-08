@@ -17,6 +17,20 @@ function randomCell() {
   return choose(Object.values(Cell));
 }
 
+class Rabbit {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+class Wolf {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
 class World {
   constructor(width, height) {
     this.width = width;
@@ -29,15 +43,41 @@ class World {
       }
       this.cells.push(row);
     }
+    this.wolves = [];
+    this.rabbits = [];
   }
   get(x, y) {
+    for (const wolf of this.wolves) {
+      if (wolf.x === x && wolf.y === y) {
+        return Cell.WOLF;
+      }
+    }
+    for (const rabbit of this.rabbits) {
+      if (rabbit.x === x && rabbit.y === y) {
+        return Cell.RABBIT;
+      }
+    }
     return this.cells[y][x];
   }
   set(x, y, value) {
     this.cells[y][x] = value;
   }
   getCells() {
-    return this.cells;
+    const output = [];
+    for (const row of this.cells) {
+      const rowCopy = [];
+      for (const cell of row) {
+        rowCopy.push(cell);
+      }
+      output.push(rowCopy);
+    }
+    for (const wolf of this.wolves) {
+      output[wolf.y][wolf.x] = Cell.WOLF;
+    }
+    for (const rabbit of this.rabbits) {
+      output[rabbit.y][rabbit.x] = Cell.RABBIT;
+    }
+    return output;
   }
   addTree() {
     let x = Math.floor(Math.random() * this.width);
@@ -54,6 +94,31 @@ class World {
       this.set(x, y + 1, Cell.WATER);
     }
   }
+
+  addWolf() {
+    // Try placing a wolf 10 times
+    for (let i = 0; i < 10; i++) {
+      let x = Math.floor(Math.random() * this.width);
+      let y = Math.floor(Math.random() * this.height);
+      if (this.get(x, y) === Cell.GROUND) {
+        console.log(x, y);
+        this.wolves.push(new Wolf(x, y));
+        break;
+      }
+    }
+  }
+
+  addRabbit() {
+    // Try placing a rabbit 10 times
+    for (let i = 0; i < 10; i++) {
+      let x = Math.floor(Math.random() * this.width);
+      let y = Math.floor(Math.random() * this.height);
+      if (this.get(x, y) === Cell.GROUND) {
+        this.rabbits.push(new Rabbit(x, y));
+        break;
+      }
+    }
+  }
 }
 
 function generateWorld(width, height) {
@@ -62,6 +127,12 @@ function generateWorld(width, height) {
     world.addTree();
   }
   world.addRiver();
+  for (let i = 0; i < 10; i++) {
+    world.addRabbit();
+  }
+  for (let i = 0; i < 3; i++) {
+    world.addWolf();
+  }
   return world;
 }
 
