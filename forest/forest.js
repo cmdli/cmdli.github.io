@@ -34,6 +34,9 @@ class Animal {
   }
 
   moveTowards(x, y) {
+    if (x < 0 || y < 0) {
+      return;
+    }
     if (x === this.x && y === this.y) {
       return;
     }
@@ -63,14 +66,15 @@ class Rabbit extends Animal {
   }
 
   tick(world) {
-    if (this.food === 0) {
+    if (this.food < 1) {
       const foodTarget = world.findNearest(this.x, this.y, Cell.TREE);
       if (distance(foodTarget, this.loc()) < 2) {
+        world.removeTree(foodTarget);
         this.food++;
       } else {
         this.moveTowards(foodTarget[0], foodTarget[1]);
       }
-    } else if (this.water === 0) {
+    } else if (this.water < 1) {
       const waterTarget = world.findNearest(this.x, this.y, Cell.WATER);
       if (distance(waterTarget, this.loc()) < 2) {
         this.water++;
@@ -88,7 +92,7 @@ class Rabbit extends Animal {
 class Wolf extends Animal {
   constructor(x, y) {
     super(x, y);
-    this.food = 10;
+    this.food = 25;
   }
 
   tick(world) {
@@ -159,9 +163,14 @@ class World {
     return output;
   }
   addTree() {
-    let x = Math.floor(Math.random() * this.width);
-    let y = Math.floor(Math.random() * this.height);
-    this.set(x, y, Cell.TREE);
+    for (let i = 0; i < 10; i++) {
+      let x = Math.floor(Math.random() * this.width);
+      let y = Math.floor(Math.random() * this.height);
+      if (this.get(x, y) === Cell.GROUND) {
+        this.set(x, y, Cell.TREE);
+        break;
+      }
+    }
   }
 
   addRiver() {
@@ -218,12 +227,19 @@ class World {
     }
   }
 
-  tick() {
+  removeTree(location) {
+    this.set(location[0], location[1], Cell.GROUND);
+  }
+
+  tick(count) {
+    for (const wolf of this.wolves) {
+      wolf.tick(this);
+    }
     for (const rabbit of this.rabbits) {
       rabbit.tick(this);
     }
-    for (const wolf of this.wolves) {
-      wolf.tick(this);
+    if (count % 1 === 0) {
+      this.addTree();
     }
   }
 
@@ -252,7 +268,7 @@ function generateWorld(width, height) {
     world.addTree();
   }
   world.addRiver();
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 25; i++) {
     world.addRabbit();
   }
   for (let i = 0; i < 3; i++) {
@@ -299,8 +315,10 @@ function render(world) {
   const topElement = document.getElementById("forest");
   const world = generateWorld(50, 50);
   let oldChild = topElement.appendChild(render(world));
+  let count = 0;
   setInterval(() => {
-    world.tick();
+    world.tick(count);
+    count++;
     topElement.removeChild(oldChild);
     oldChild = render(world);
     topElement.appendChild(oldChild);
