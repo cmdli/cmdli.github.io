@@ -23,12 +23,10 @@ function distance(loc1, loc2) {
   return Math.sqrt(d1 * d1 + d2 * d2);
 }
 
-class Rabbit {
+class Animal {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.food = 0;
-    this.water = 0;
   }
 
   loc() {
@@ -36,6 +34,9 @@ class Rabbit {
   }
 
   moveTowards(x, y) {
+    if (x === this.x && y === this.y) {
+      return;
+    }
     let xDiff = x - this.x;
     let yDiff = y - this.y;
     if (xDiff * xDiff > yDiff * yDiff) {
@@ -51,6 +52,14 @@ class Rabbit {
         this.y++;
       }
     }
+  }
+}
+
+class Rabbit extends Animal {
+  constructor(x, y) {
+    super(x, y);
+    this.food = 0;
+    this.water = 0;
   }
 
   tick(world) {
@@ -76,10 +85,28 @@ class Rabbit {
   }
 }
 
-class Wolf {
+class Wolf extends Animal {
   constructor(x, y) {
-    this.x = x;
-    this.y = y;
+    super(x, y);
+    this.food = 10;
+  }
+
+  tick(world) {
+    if (this.food > 50) {
+      world.addWolf();
+      this.food -= 25;
+    } else if (this.food < 0) {
+      world.removeWolf(this.loc());
+    } else {
+      const target = world.findNearest(this.x, this.y, Cell.RABBIT);
+      if (distance(target, this.loc()) < 2) {
+        world.removeRabbit(target);
+        this.food += 5;
+      } else {
+        this.moveTowards(target[0], target[1]);
+      }
+    }
+    this.food--;
   }
 }
 
@@ -171,9 +198,32 @@ class World {
     }
   }
 
+  removeRabbit(location) {
+    for (let i = 0; i < this.rabbits.length; i++) {
+      const rabbit = this.rabbits[i];
+      if (rabbit.x === location[0] && rabbit.y === location[1]) {
+        this.rabbits.splice(i, 1);
+        break;
+      }
+    }
+  }
+
+  removeWolf(location) {
+    for (let i = 0; i < this.wolves.length; i++) {
+      const wolf = this.wolves[i];
+      if (wolf.x === location[0] && wolf.y === location[1]) {
+        this.wolves.splice(i, 1);
+        break;
+      }
+    }
+  }
+
   tick() {
     for (const rabbit of this.rabbits) {
       rabbit.tick(this);
+    }
+    for (const wolf of this.wolves) {
+      wolf.tick(this);
     }
   }
 
@@ -204,6 +254,9 @@ function generateWorld(width, height) {
   world.addRiver();
   for (let i = 0; i < 10; i++) {
     world.addRabbit();
+  }
+  for (let i = 0; i < 3; i++) {
+    world.addWolf();
   }
   return world;
 }
@@ -251,5 +304,5 @@ function render(world) {
     topElement.removeChild(oldChild);
     oldChild = render(world);
     topElement.appendChild(oldChild);
-  }, 1000);
+  }, 500);
 })();
