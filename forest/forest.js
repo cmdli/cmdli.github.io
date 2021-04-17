@@ -1,5 +1,14 @@
 "use strict";
 
+// Parameters
+let rabbitFoodRequired = 1;
+let rabbitWaterRequired = 1;
+let wolfReproduceThreshold = 50;
+let wolfRabbitFoodValue = 5;
+let startingWolves = 3;
+let startingRabbits = 25;
+let tickDelay = 500;
+
 const Cell = {
   GROUND: 1,
   TREE: 2,
@@ -66,7 +75,7 @@ class Rabbit extends Animal {
   }
 
   tick(world) {
-    if (this.food < 1) {
+    if (this.food < rabbitFoodRequired) {
       const foodTarget = world.findNearest(this.x, this.y, Cell.TREE);
       if (distance(foodTarget, this.loc()) < 2) {
         world.removeTree(foodTarget);
@@ -74,7 +83,7 @@ class Rabbit extends Animal {
       } else {
         this.moveTowards(foodTarget[0], foodTarget[1]);
       }
-    } else if (this.water < 1) {
+    } else if (this.water < rabbitWaterRequired) {
       const waterTarget = world.findNearest(this.x, this.y, Cell.WATER);
       if (distance(waterTarget, this.loc()) < 2) {
         this.water++;
@@ -92,20 +101,20 @@ class Rabbit extends Animal {
 class Wolf extends Animal {
   constructor(x, y) {
     super(x, y);
-    this.food = 25;
+    this.food = wolfReproduceThreshold / 2;
   }
 
   tick(world) {
-    if (this.food > 50) {
+    if (this.food > wolfReproduceThreshold) {
       world.addWolf();
-      this.food -= 25;
+      this.food -= wolfReproduceThreshold / 2;
     } else if (this.food < 0) {
       world.removeWolf(this.loc());
     } else {
       const target = world.findNearest(this.x, this.y, Cell.RABBIT);
       if (distance(target, this.loc()) < 2) {
         world.removeRabbit(target);
-        this.food += 5;
+        this.food += wolfRabbitFoodValue;
       } else {
         this.moveTowards(target[0], target[1]);
       }
@@ -268,10 +277,10 @@ function generateWorld(width, height) {
     world.addTree();
   }
   world.addRiver();
-  for (let i = 0; i < 25; i++) {
+  for (let i = 0; i < startingRabbits; i++) {
     world.addRabbit();
   }
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < startingWolves; i++) {
     world.addWolf();
   }
   return world;
@@ -311,16 +320,70 @@ function render(world) {
   return output;
 }
 
-(() => {
+function addControl(id, startingValue, update) {
+  const element = document.getElementById(id);
+  element.value = startingValue;
+  if (element.getAttribute("type") === "button") {
+    element.onclick = (e) => {
+      update();
+    };
+  } else {
+    element.oninput = (e) => {
+      update(e.target.value);
+    };
+  }
+}
+
+function initControls() {
+  addControl("starting-wolves", startingWolves, (v) => {
+    startingWolves = v;
+  });
+  addControl("starting-rabbits", startingRabbits, (v) => {
+    startingRabbits = v;
+  });
+  addControl("wolf-food-threshold", wolfReproduceThreshold, (v) => {
+    wolfReproduceThreshold = v;
+  });
+  addControl("rabbit-food-threshold", rabbitFoodRequired, (v) => {
+    rabbitFoodRequired = v;
+  });
+  addControl("rabbit-water-threshold", rabbitWaterRequired, (v) => {
+    rabbitWaterRequired = v;
+  });
+  addControl("tick-delay", tickDelay, (v) => {
+    tickDelay = v;
+  });
+  addControl("restart", "Restart", (v) => {
+    console.log("Restart");
+    restart();
+  });
+}
+
+let world;
+let oldChild;
+let count;
+let loop = 0;
+function restart() {
   const topElement = document.getElementById("forest");
-  const world = generateWorld(50, 50);
-  let oldChild = topElement.appendChild(render(world));
-  let count = 0;
-  setInterval(() => {
+  for (const child of topElement.children) {
+    topElement.removeChild(child);
+  }
+  world = generateWorld(50, 50);
+  oldChild = topElement.appendChild(render(world));
+  count = 0;
+  if (loop) {
+    clearInterval(loop);
+  }
+  loop = setInterval(() => {
     world.tick(count);
     count++;
     topElement.removeChild(oldChild);
     oldChild = render(world);
     topElement.appendChild(oldChild);
-  }, 500);
+  }, tickDelay);
+}
+
+(() => {
+  initControls();
+  restart();
 })();

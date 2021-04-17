@@ -5,7 +5,18 @@
         <title>Forest</title>
     </head>
     <body>
-        <div id="forest"></div>
+        <div class="container">
+            <div id="forest"></div>
+            <div class="sidebar">
+                <input type="button" id="restart" value="Restart">
+                <span>Starting Rabbits: <input type="number" id="starting-rabbits"></span>
+                <span>Starting Wolves: <input type="number" id="starting-wolves"></span>
+                <span>Food Needed to Reproduce (Wolf): <input type="number" id="wolf-food-threshold"></span>
+                <span>Food Needed to Reproduce (Rabbit): <input type="number" id="rabbit-food-threshold"></span>
+                <span>Water Needed to Reproduce (Rabbit): <input type="number" id="rabbit-water-threshold"></span>
+                <span>Tick delay (ms): <input type="number" id="tick-delay"></span>
+            </div>
+        </div>
         <script src="forest.js"></script>
         <link href="forest.css" rel="stylesheet">
     </body>
