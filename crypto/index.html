@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Examples in Cryptography</title>
+</head>
+
+<body>
+    <h3>Caesar Cipher (Encrypt):</h3>
+    <span id="caesar">
+        <div class="inputs">
+            <div class="input">
+                Text:<input type="text">
+            </div>
+            <div class="input">
+                Shift:<input type="number" value="0">
+            </div>
+        </div>
+    </span>
+    <h3>Caesar Cipher (Decrypt):</h3>
+    <span id="caesar-decrypt">
+        <div class="inputs">
+            <div class="input">
+                Text:<input type="text">
+            </div>
+            <div class="input">
+                Shift:<input type="number" value="0">
+            </div>
+        </div>
+    </span>
+    <h3>Vigenere Cipher (Encrypt):</h3>
+    <span id="vigenere-encrypt">
+        <div class="inputs">
+            <div class="input">
+                Text:<input type="text">
+            </div>
+            <div class="input">
+                Cipher Word:<input type="text">
+            </div>
+        </div>
+    </span>
+    <h3>Vigenere Cipher (Decrypt):</h3>
+    <span id="vigenere-decrypt">
+        <div class="inputs">
+            <div class="input">
+                Text:<input type="text">
+            </div>
+            <div class="input">
+                Cipher Word:<input type="text">
+            </div>
+        </div>
+    </span>
+    <h3>Vigenere Cipher, Shift, Vigenere Cipher (Encrypt):</h3>
+    <p>This is worse than doing Vigenere cipher twice with different keywords.</p>
+    <span id="vigenere-shift-encrypt">
+        <div class="inputs">
+            <div class="input">
+                Text:<input type="text">
+            </div>
+            <div class="input">
+                Cipher Word:<input type="text">
+            </div>
+            <div class="input">
+                Shift:<input type="number">
+            </div>
+        </div>
+    </span>
+    <h3>Vigenere Cipher, Shift, Vigenere Cipher (Decrypt):</h3>
+    <span id="vigenere-shift-decrypt">
+        <div class="inputs">
+            <div class="input">
+                Text:<input type="text">
+            </div>
+            <div class="input">
+                Cipher Word:<input type="text">
+            </div>
+            <div class="input">
+                Shift:<input type="number">
+            </div>
+        </div>
+    </span>
+    <script src="crypto.js"></script>
+    <link href="crypto.css" rel="stylesheet">
+</body>
+
+</html>

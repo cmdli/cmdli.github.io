@@ -1,0 +1,23 @@
+body {
+  font-family: "Roboto", Arial, sans-serif;
+  margin: 40px auto;
+  max-width: 600px;
+  line-height: 1.6;
+  background-color: rgb(221, 196, 128);
+}
+
+span,
+.input {
+  display: flex;
+  align-items: center;
+}
+
+span div,
+input {
+  margin: 0 1em;
+}
+.inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
