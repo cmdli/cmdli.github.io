@@ -84,17 +84,21 @@ function caesarDecrypt(inputs) {
   return output;
 }
 
+function buildCipher(word, length) {
+  let cipher = "";
+  while (cipher.length < length) {
+    cipher += word;
+  }
+  return cipher.substring(0, length);
+}
+
 function vigenereEncrypt(inputs) {
   const text = inputs[0].toUpperCase();
   const cipherWord = inputs[1].toUpperCase();
   if (!cipherWord) {
     return text;
   }
-  let cipher = "";
-  while (cipher.length < text.length) {
-    cipher += cipherWord;
-  }
-  cipher = cipher.substring(0, text.length);
+  const cipher = buildCipher(cipherWord, text.length);
   let output = "";
   for (let i = 0; i < text.length; i++) {
     let textI = letters.indexOf(text[i]);
@@ -115,11 +119,7 @@ function vigenereDecrypt(inputs) {
   if (!cipherWord) {
     return text;
   }
-  let cipher = "";
-  while (cipher.length < text.length) {
-    cipher += cipherWord;
-  }
-  cipher = cipher.substring(0, text.length);
+  const cipher = buildCipher(cipherWord, text.length);
   let output = "";
   for (let i = 0; i < text.length; i++) {
     let textI = letters.indexOf(text[i]);
@@ -160,6 +160,53 @@ function vigenereShiftDecrypt(inputs) {
   return vigenereDecrypt([shifted, cipherWord]);
 }
 
+function cumulativeVigenereEncrypt(inputs) {
+  const text = inputs[0].toUpperCase();
+  const cipherWord = inputs[1].toUpperCase();
+  if (!cipherWord) {
+    return "";
+  }
+  const cipher = buildCipher(cipherWord, text.length);
+  let output = "";
+  let carry = 0;
+  for (let i = 0; i < text.length; i++) {
+    let textI = letters.indexOf(text[i]);
+    let cipherI = letters.indexOf(cipher[i]);
+    if (textI >= 0 && cipherI >= 0) {
+      const nextI = (textI + cipherI + carry + letters.length) % letters.length;
+      carry = nextI;
+      output += letters[nextI];
+    } else {
+      output += text[i];
+    }
+  }
+  return output;
+}
+
+function cumulativeVigenereDecrypt(inputs) {
+  const text = inputs[0].toUpperCase();
+  const cipherWord = inputs[1].toUpperCase();
+  if (!cipherWord) {
+    return "";
+  }
+  const cipher = buildCipher(cipherWord, text.length);
+  let output = "";
+  let carry = 0;
+  for (let i = 0; i < text.length; i++) {
+    let textI = letters.indexOf(text[i]);
+    let cipherI = letters.indexOf(cipher[i]);
+    if (textI >= 0 && cipherI >= 0) {
+      const nextI =
+        (textI - cipherI - carry + letters.length * 2) % letters.length;
+      carry = textI;
+      output += letters[nextI];
+    } else {
+      output += text[i];
+    }
+  }
+  return output;
+}
+
 (() => {
   new Function("caesar", caesarCipher);
   new Function("caesar-decrypt", caesarDecrypt);
@@ -167,4 +214,6 @@ function vigenereShiftDecrypt(inputs) {
   new Function("vigenere-decrypt", vigenereDecrypt);
   new Function("vigenere-shift-encrypt", vigenereShiftEncrypt);
   new Function("vigenere-shift-decrypt", vigenereShiftDecrypt);
+  new Function("cumulative-vigenere-encrypt", cumulativeVigenereEncrypt);
+  new Function("cumulative-vigenere-decrypt", cumulativeVigenereDecrypt);
 })();
