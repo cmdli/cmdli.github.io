@@ -6,8 +6,19 @@
 </head>
 
 <body>
-    <h3>Caesar Cipher (Encrypt):</h3>
-    <span id="caesar">
+    <h2>Caesar Cipher</h2>
+    <p>
+        The Caesar cipher is a very simple type of cipher. Take each letter of the input and shift it down
+        the alphabet by a certain number of letters. For example, A shifted by 3 becomes D. For the purposes of this,
+        the alphabet "wraps around"; for example, Z shifted by 3 becomes C.
+    </p>
+    <p>
+        This, of course, is a very easy cipher to break, as there are only 26 possible ways to shift a piece
+        of text, and those can all be tried easily. Try encrypting a piece of text below, then try decrypting it
+        by simply increasing the shift value until the text makes sense.
+    </p>
+    <h4>Encrypt</h4>
+    <div id="caesar-encrypt" class="function">
         <div class="inputs">
             <div class="input">
                 Text:<input type="text">
@@ -16,9 +27,9 @@
                 Shift:<input type="number" value="0">
             </div>
         </div>
-    </span>
-    <h3>Caesar Cipher (Decrypt):</h3>
-    <span id="caesar-decrypt">
+    </div>
+    <h4>Decrypt</h4>
+    <div id="caesar-decrypt" class="function">
         <div class="inputs">
             <div class="input">
                 Text:<input type="text">
@@ -27,9 +38,25 @@
                 Shift:<input type="number" value="0">
             </div>
         </div>
-    </span>
-    <h3>Vigenere Cipher (Encrypt):</h3>
-    <span id="vigenere-encrypt">
+    </div>
+    <h2>Vigenere Cipher</h2>
+    <p>
+        The Vigenere Cipher improves upon the Caesar Cipher by adding a set of shifts, often represented by
+        a cipher word. Each letter in the cipher word (e.g. LEMON) is converted to the number of its place in
+        the alphabet minus one (e.g. A becomes 0, E becomes 4, L becomes 11). Then, the plain text is aligned
+        with the cipher word like so:
+    </p>
+    <div class="vigenere-example">
+        <span>ATTACKATDAWN</span>
+        <span>LEMONLEMONLE</span>
+    </div>
+    <p>
+        Notice that the cipher word is repeated until it reaches the length of the plaintext. Each corresponding
+        letter in the plain text is converted by shifting it by the value of the letter in the cipher word. For
+        example, A shift by L (11) becomes L, T shifted by E (5) becomes X, and so on.
+    </p>
+    <h4>Encrypt</h4>
+    <div id="vigenere-encrypt" class="function">
         <div class="inputs">
             <div class="input">
                 Text:<input type="text">
@@ -38,9 +65,9 @@
                 Cipher Word:<input type="text">
             </div>
         </div>
-    </span>
-    <h3>Vigenere Cipher (Decrypt):</h3>
-    <span id="vigenere-decrypt">
+    </div>
+    <h4>Decrypt</h4>
+    <div id="vigenere-decrypt" class="function">
         <div class="inputs">
             <div class="input">
                 Text:<input type="text">
@@ -49,11 +76,18 @@
                 Cipher Word:<input type="text">
             </div>
         </div>
-    </span>
-    <h3>Vigenere Cipher, Shift, Vigenere Cipher (Encrypt):</h3>
+    </div>
+    <h2>Vigenere Cipher, Shift, Vigenere Cipher</h2>
+    <p>
+        This method encrypts the text by first applying the Vigenere cipher, then transposing the result
+        by moving each letter a number of places to the right (e.g. |ATTACKATDAWN| becomes AWN|ATTACKATD),
+        then applying the Vigenere cipher again.
+    </p>
     <p>This is significantly worse than doing Vigenere cipher twice with different keywords, and only very slightly
-        better than a single Vigenere Cipher.</p>
-    <span id="vigenere-shift-encrypt">
+        better than a single Vigenere Cipher. The second cipher can be broken as easily as
+        a single Vigenere Cipher, and then the key can be deduced.</p>
+    <h4>Encrypt</h4>
+    <div id="vigenere-shift-encrypt" class="function">
         <div class="inputs">
             <div class="input">
                 Text:<input type="text">
@@ -65,9 +99,9 @@
                 Shift:<input type="number">
             </div>
         </div>
-    </span>
-    <h3>Vigenere Cipher, Shift, Vigenere Cipher (Decrypt):</h3>
-    <span id="vigenere-shift-decrypt">
+    </div>
+    <h4>Decrypt</h4>
+    <div id="vigenere-shift-decrypt" class="function">
         <div class="inputs">
             <div class="input">
                 Text:<input type="text">
@@ -79,9 +113,10 @@
                 Shift:<input type="number">
             </div>
         </div>
-    </span>
-    <h3>Cumulative Vigenere Cipher (Encrypt):</h3>
-    <span id="cumulative-vigenere-encrypt">
+    </div>
+    <h2>Cumulative Vigenere Cipher</h2>
+    <h4>Encrypt</h4>
+    <div id="cumulative-vigenere-encrypt" class="function">
         <div class="inputs">
             <div class="input">
                 Text:<input type="text">
@@ -90,9 +125,9 @@
                 Cipher Word:<input type="text">
             </div>
         </div>
-    </span>
-    <h3>Cumulative Vigenere Cipher (Decrypt):</h3>
-    <span id="cumulative-vigenere-decrypt">
+    </div>
+    <h4>Decrypt</h4>
+    <div id="cumulative-vigenere-decrypt" class="function">
         <div class="inputs">
             <div class="input">
                 Text:<input type="text">
@@ -101,7 +136,7 @@
                 Cipher Word:<input type="text">
             </div>
         </div>
-    </span>
+    </div>
     <script src="crypto.js"></script>
     <link href="crypto.css" rel="stylesheet">
 </body>

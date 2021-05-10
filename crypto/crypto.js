@@ -6,7 +6,11 @@ class Function {
     const topLevel = document.querySelector("#" + id);
     this.inputs = document.querySelectorAll("#" + id + " input");
     this.output = document.createElement("div");
-    topLevel.appendChild(document.createTextNode("-->"));
+    this.output.classList.add("output");
+    const arrow = document.createElement("div");
+    arrow.classList.add("arrow");
+    arrow.appendChild(document.createTextNode("➔"));
+    topLevel.appendChild(arrow);
     topLevel.appendChild(this.output);
 
     this.update();
@@ -54,7 +58,7 @@ const letters = [
 
 function caesarCipher(inputs) {
   let output = "";
-  const text = inputs[0];
+  const text = inputs[0].toUpperCase();
   const shift = parseInt(inputs[1], 10);
   for (const letter of text) {
     const i = letters.indexOf(letter);
@@ -208,7 +212,7 @@ function cumulativeVigenereDecrypt(inputs) {
 }
 
 (() => {
-  new Function("caesar", caesarCipher);
+  new Function("caesar-encrypt", caesarCipher);
   new Function("caesar-decrypt", caesarDecrypt);
   new Function("vigenere-encrypt", vigenereEncrypt);
   new Function("vigenere-decrypt", vigenereDecrypt);

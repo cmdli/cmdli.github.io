@@ -1,23 +1,62 @@
 body {
-  font-family: "Roboto", Arial, sans-serif;
+  font-family: "Century Gothic", "CenturyGothic", "AppleGothic", sans-serif;
   margin: 40px auto;
-  max-width: 600px;
+  max-width: 650px;
   line-height: 1.6;
   background-color: rgb(221, 196, 128);
-}
-
-span,
-.input {
-  display: flex;
-  align-items: center;
 }
 
 span div,
 input {
   margin: 0 1em;
 }
+span,
+.input {
+  display: flex;
+  align-items: center;
+}
+
+input {
+  border-radius: 2px;
+  border: 2px solid transparent;
+}
+
+h2 {
+  display: flex;
+  justify-content: center;
+}
+
+.output {
+  flex: 1 1 0;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+}
+.arrow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .inputs {
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+}
+.function {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  font-family: "Courier New", "Courier", "Lucida Sans Typewriter",
+    "Lucida Typewriter", monospace;
+}
+
+.vigenere-example {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Courier New", "Courier", "Lucida Sans Typewriter",
+    "Lucida Typewriter", monospace;
+  line-height: 1em;
 }
