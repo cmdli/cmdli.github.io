@@ -211,6 +211,43 @@ function cumulativeVigenereDecrypt(inputs) {
   return output;
 }
 
+function railFenceEncrypt(inputs) {
+  const text = inputs[0].toUpperCase();
+  const numberOfRails = parseInt(inputs[1]);
+  if (!numberOfRails || numberOfRails < 2) {
+    return text;
+  }
+  const rails = [];
+  for (let i = 0; i < numberOfRails; i++) {
+    rails.push("");
+  }
+  let railI = 0;
+  let descending = true;
+  for (let i = 0; i < text.length; i++) {
+    rails[railI] += text[i];
+    if (descending) {
+      if (railI < numberOfRails - 1) {
+        railI++;
+      } else {
+        railI--;
+        descending = false;
+      }
+    } else {
+      if (railI > 0) {
+        railI--;
+      } else {
+        railI++;
+        descending = true;
+      }
+    }
+  }
+  let output = "";
+  for (const rail of rails) {
+    output += rail;
+  }
+  return output;
+}
+
 (() => {
   new Function("caesar-encrypt", caesarCipher);
   new Function("caesar-decrypt", caesarDecrypt);
@@ -220,4 +257,5 @@ function cumulativeVigenereDecrypt(inputs) {
   new Function("vigenere-shift-decrypt", vigenereShiftDecrypt);
   new Function("cumulative-vigenere-encrypt", cumulativeVigenereEncrypt);
   new Function("cumulative-vigenere-decrypt", cumulativeVigenereDecrypt);
+  new Function("rail-fence-encrypt", railFenceEncrypt);
 })();
