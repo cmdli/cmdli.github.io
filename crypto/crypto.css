@@ -3,7 +3,16 @@ body {
   margin: 40px auto;
   max-width: 650px;
   line-height: 1.4;
+  font-size: 1.2rem;
+  background-color: #f3f3f3;
+}
+
+.old {
   background-color: rgb(221, 196, 128);
+}
+
+p {
+  font-family: "Open Sans", "Arial", sans-serif;
 }
 
 span div,
@@ -21,7 +30,7 @@ input {
   border: 2px solid transparent;
 }
 
-h2 {
+h1 {
   display: flex;
   justify-content: center;
 }
@@ -59,4 +68,49 @@ h2 {
   font-family: "Courier New", "Courier", "Lucida Sans Typewriter",
     "Lucida Typewriter", monospace;
   line-height: 1em;
+}
+#caesar-intro-container {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  font-size: 36px;
+  font-family: "Courier New", "Courier", "Lucida Sans Typewriter",
+    "Lucida Typewriter", monospace;
+  font-weight: bold;
+  color: rgb(19, 24, 95);
+  height: 1em;
+  line-height: 1;
+}
+#caesar-intro-animation {
+  position: relative;
+  animation-duration: 4s;
+  animation-name: caesar-intro;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes caesar-intro {
+  from {
+    top: 0px;
+  }
+
+  20% {
+    top: 0px;
+  }
+
+  40% {
+    top: -1em;
+  }
+
+  60% {
+    top: -1em;
+  }
+
+  80% {
+    top: -2em;
+  }
+
+  to {
+    top: -2em;
+  }
 }
