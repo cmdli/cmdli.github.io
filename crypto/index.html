@@ -3,10 +3,20 @@
 
 <head>
     <title>Examples in Cryptography</title>
+    <link href="crypto.css" rel="stylesheet">
 </head>
 
 <body>
     <h1>Basics of Cryptography</h1>
+    <div id="caesar-frequencies" class="graph-example">
+        <div class="labelled-data">
+            <div class="label">Caesar Cipher key</div>
+            <input type="text" value="0" class="data">
+        </div>
+        <div class="graph">
+            <canvas width="400" height="400"></canvas>
+        </div>
+    </div>
     <h2>Starting at the Top: The Caesar Cipher</h2>
     <div id="caesar-intro-container">
         <div id="caesar-intro-animation">
@@ -187,8 +197,8 @@
             </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.1/chart.min.js"></script>
     <script src="crypto.js"></script>
-    <link href="crypto.css" rel="stylesheet">
 </body>
 
 </html>

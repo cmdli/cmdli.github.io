@@ -1,5 +1,35 @@
 "use strict";
 
+let appleWikipediaText;
+const englishFrequencies = {
+  A: 43.31,
+  B: 10.56,
+  C: 23.13,
+  D: 17.25,
+  E: 56.88,
+  F: 9.24,
+  G: 12.59,
+  H: 15.31,
+  I: 38.45,
+  J: 1.01,
+  K: 5.61,
+  L: 27.98,
+  M: 15.36,
+  N: 33.92,
+  O: 36.51,
+  P: 16.14,
+  Q: 1,
+  R: 38.64,
+  S: 29.23,
+  T: 35.43,
+  U: 18.51,
+  V: 5.13,
+  W: 6.57,
+  X: 1.48,
+  Y: 9.06,
+  Z: 1.39,
+};
+
 class Function {
   constructor(id, func) {
     this.func = func;
@@ -30,6 +60,61 @@ class Function {
   update() {
     const inputValues = Array.from(this.inputs).map((input) => input.value);
     this.output.textContent = this.func(inputValues);
+  }
+}
+
+class Graph {
+  constructor(id, func) {
+    this.func = func;
+    this.inputs = document.querySelectorAll("#" + id + " input");
+    const graphContext = document.querySelector("#" + id + " canvas");
+    this.graph = new Chart(graphContext, {
+      type: "bar",
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              display: false,
+            },
+          },
+          x: {
+            grid: {
+              display: false,
+            },
+          },
+        },
+      },
+    });
+    this.update();
+    for (const input of this.inputs.values()) {
+      input.oninput = () => {
+        input.value = input.value.toUpperCase();
+        this.update();
+      };
+    }
+  }
+
+  update() {
+    const inputValues = Array.from(this.inputs.values()).map(
+      (input) => input.value
+    );
+    const frequencies = this.func(inputValues);
+    const sortedFrequencies = Object.entries(frequencies).sort(
+      (a, b) => b[1] - a[1]
+    );
+    this.graph.data = {
+      labels: sortedFrequencies.map((a) => a[0]),
+      datasets: [
+        {
+          label: "Frequency",
+          data: sortedFrequencies.map((a) => a[1]),
+          backgroundColor: ["rgba(47, 143, 255, 1.0)"],
+          showLine: false,
+        },
+      ],
+    };
+    this.graph.update();
   }
 }
 
@@ -307,12 +392,16 @@ function getFrequencies(text) {
       frequencies[letter] = 1;
     }
   }
-  const sortedEntries = Object.entries(frequencies).sort((a, b) => b[1] - a[1]);
-  const minimumFreq = sortedEntries[sortedEntries.length - 1][1];
-  for (let i = 0; i < sortedEntries.length; i++) {
-    sortedEntries[i][1] /= minimumFreq;
+  let minimumFreq;
+  for (const letter of Object.keys(frequencies)) {
+    if (!minimumFreq || frequencies[letter] < minimumFreq) {
+      minimumFreq = frequencies[letter];
+    }
   }
-  return sortedEntries;
+  for (const letter of Object.keys(frequencies)) {
+    frequencies[letter] /= minimumFreq;
+  }
+  return frequencies;
 }
 
 function networkEncrypt(text, key) {
@@ -353,7 +442,7 @@ function splitText(text, modulo) {
   return groups;
 }
 
-(() => {
+setTimeout(() => {
   new Function("vigenere-encrypt", vigenereEncrypt);
   new Function("vigenere-decrypt", vigenereDecrypt);
   new Function("vigenere-shift-encrypt", vigenereShiftEncrypt);
@@ -362,9 +451,12 @@ function splitText(text, modulo) {
   new Function("cumulative-vigenere-decrypt", cumulativeVigenereDecrypt);
   new Function("rail-fence-encrypt", railFenceEncrypt);
   new Function("caesar-interactive", caesarCipher);
-})();
+  new Graph("caesar-frequencies", (inputs) => {
+    return getFrequencies(caesarCipher([appleWikipediaText].concat(inputs)));
+  });
+}, 100);
 
-const text = cleanupText(`
+appleWikipediaText = cleanupText(`
 This is a good article. Click here for more information.
 Page semi-protected
 Apple
