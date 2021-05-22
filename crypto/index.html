@@ -7,7 +7,7 @@
 
 <body>
     <h1>Basics of Cryptography</h1>
-    <h2>Caesar Cipher</h2>
+    <h2>Starting at the Top: The Caesar Cipher</h2>
     <div id="caesar-intro-container">
         <div id="caesar-intro-animation">
             <div>APPLES ARE TASTY</div>
@@ -16,38 +16,57 @@
         </div>
     </div>
     <p>
-        The Caesar cipher is a very simple type of cipher. Take each letter of the input and shift it down
-        the alphabet by a certain number of letters. For example, A shifted by 3 becomes D. For the purposes of this,
-        the alphabet "wraps around"; for example, Z shifted by 3 becomes C.
+        The <strong>Caesar Cipher</strong> is one of the oldest and simplest methods of encryption. The basic concept is
+        incredibly
+        simple; just take each letter and shift it up or down the alphabet by a known number of places.
     </p>
     <p>
-        This, of course, is a very easy cipher to break, as there are only 26 possible ways to shift a piece
-        of text, and those can all be tried easily. Try encrypting a piece of text below, then try decrypting it
-        by simply increasing the shift value until the text makes sense.
+        For example, shifting forward by three means A becomes D, G becomes J, M becomes P. To get the original message,
+        just move
+        back down the alphabet by the same number. The resulting message doesn't resemble the original at all. Easy,
+        right?
     </p>
-    <h4>Encrypt</h4>
-    <div id="caesar-encrypt" class="function">
-        <div class="inputs">
-            <div class="input">
-                Text:<input type="text">
+    <p>
+        Even with this, we can start to see the outline of cryptography: the original message, or
+        <strong>plaintext</strong>, the
+        obfuscated resulting message, or <strong>ciphertext</strong>, and the number to shift by, or
+        the <strong>key</strong>.
+    </p>
+    <div id="caesar-interactive" class="function example">
+        <div class="side left">
+            <div class="labelled-data">
+                <div class="label">plaintext</div>
+                <input type="text" class="data">
             </div>
-            <div class="input">
-                Shift:<input type="number" value="0">
+            <div class="symbol">+</div>
+            <div class="labelled-data short">
+                <div class="label">key</div>
+                <input type="text" value="0" class="data">
+            </div>
+        </div>
+        <div class="arrow-container">
+            <div class="symbol">➔</div>
+        </div>
+        <div class="side">
+            <div class="labelled-data">
+                <div class="label">ciphertext</div>
+                <div id="output" class="data data-output"></div>
             </div>
         </div>
     </div>
-    <h4>Decrypt</h4>
-    <div id="caesar-decrypt" class="function">
-        <div class="inputs">
-            <div class="input">
-                Text:<input type="text">
-            </div>
-            <div class="input">
-                Shift:<input type="number" value="0">
-            </div>
-        </div>
-    </div>
-    <h2>Vigenere Cipher</h2>
+    <p>
+        Using this simple example, let's think about how to break it. If we were given just some ciphertext, such as
+        <em>KJQNSJ</em>, how might we figure out the original plaintext? Well, with only 26 possible ways of
+        shifting letters up
+        and down, it becomes trivial to try all the ways and retrieve the original message.
+    </p>
+    <p>
+        This is one way that cryptography can fall apart: effective key space size. With only 26 ways of encrypting any
+        piece of text, our key space is incredibly small, even small enough to be broken by hand. So, how can we
+        increase the size of our key space so an attacker can’t simply try all combinations?
+    </p>
+    </p>
+    <h2>State of the Art (for the 16th century): The Vigenère Cipher</h2>
     <p>
         The Vigenere Cipher improves upon the Caesar Cipher by adding a set of shifts, often represented by
         a cipher word. Each letter in the cipher word (e.g. LEMON) is converted to the number of its place in
