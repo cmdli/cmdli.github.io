@@ -64,7 +64,8 @@ class Function {
 }
 
 class Graph {
-  constructor(id, func) {
+  constructor(id, func, title) {
+    this.title = title;
     this.func = func;
     this.inputs = document.querySelectorAll("#" + id + " input");
     const graphContext = document.querySelector("#" + id + " canvas");
@@ -84,8 +85,24 @@ class Graph {
             },
           },
         },
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
       },
     });
+    if (this.title) {
+      this.graph.options.plugins.title = {
+        display: true,
+        text: this.title,
+        font: {
+          size: 18,
+          family:
+            '"Century Gothic", "CenturyGothic", "AppleGothic", sans-serif',
+        },
+      };
+    }
     this.update();
     for (const input of this.inputs.values()) {
       input.oninput = () => {
@@ -454,6 +471,36 @@ setTimeout(() => {
   new Graph("caesar-frequencies", (inputs) => {
     return getFrequencies(caesarCipher([appleWikipediaText].concat(inputs)));
   });
+  new Graph(
+    "english-frequencies",
+    () => englishFrequencies,
+    "Frequency of letters in English"
+  );
+  new Graph(
+    "english-translation-frequencies",
+    () => englishFrequencies,
+    "English Text"
+  );
+  new Graph(
+    "caesar-wikipedia-frequencies",
+    () => getFrequencies(caesarCipher([appleWikipediaText, 5])),
+    "Example Ciphertext"
+  );
+  new Graph(
+    "vigenere-wikipedia-frequencies",
+    () => getFrequencies(vigenereEncrypt([appleWikipediaText, "LEMON"])),
+    "Frequency of letters after the Vigenere Cipher"
+  );
+  new Graph(
+    "vigenere-first-group-frequencies",
+    () => {
+      const key = "LEMON";
+      const ciphertext = vigenereEncrypt([appleWikipediaText, key]);
+      const groups = splitText(ciphertext, key.length);
+      return getFrequencies(groups[0]);
+    },
+    "First Letter Group"
+  );
 }, 100);
 
 appleWikipediaText = cleanupText(`

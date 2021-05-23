@@ -4,11 +4,20 @@ body {
   max-width: 700px;
   line-height: 1.4;
   font-size: 1.25rem;
-  background-color: #f3f3f3;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
 }
 
 p {
   font-family: "Open Sans", "Arial", sans-serif;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 span div,
@@ -25,7 +34,16 @@ input,
 .data {
   border-radius: 2px;
   border: 2px solid transparent;
-  background-color: white;
+  background-color: #f3f3f3;
+}
+.image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.image p {
+  font-style: italic;
+  font-size: 1rem;
 }
 
 h1 {
@@ -51,22 +69,13 @@ h1 {
   align-items: flex-end;
 }
 .function {
+  margin-top: 1rem;
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: center;
   font-family: "Courier New", "Courier", "Lucida Sans Typewriter",
     "Lucida Typewriter", monospace;
-}
-
-.vigenere-example {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-family: "Courier New", "Courier", "Lucida Sans Typewriter",
-    "Lucida Typewriter", monospace;
-  line-height: 1em;
 }
 #caesar-intro-container {
   display: flex;
