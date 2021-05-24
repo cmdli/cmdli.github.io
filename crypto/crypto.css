@@ -22,12 +22,16 @@ h2 {
 
 .titlebar {
   display: flex;
+  justify-content: space-between;
 }
-.home-link {
+.titlebar a {
   color: #333333;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin: 1rem 1rem;
   text-decoration: none;
+}
+.titlebar div {
+  display: flex;
 }
 
 .row {
