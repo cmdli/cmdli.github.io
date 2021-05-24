@@ -1,16 +1,33 @@
 body {
-  font-family: "Century Gothic", "CenturyGothic", "AppleGothic", sans-serif;
-  margin: 40px auto;
-  max-width: 700px;
-  line-height: 1.4;
+  font-family: "Open Sans", "Arial", sans-serif;
   font-size: 1.25rem;
   background-color: #ffffff;
+}
+.content {
+  margin: 40px auto;
+  line-height: 1.4;
+  max-width: 700px;
   display: flex;
   flex-direction: column;
 }
 
-p {
-  font-family: "Open Sans", "Arial", sans-serif;
+h2 {
+  font-family: "Montserrat", "Helvetica", sans-serif;
+}
+.subtitle {
+  font-style: italic;
+  font-size: 1rem;
+  margin-top: 0;
+}
+
+.titlebar {
+  display: flex;
+}
+.home-link {
+  color: #333333;
+  font-size: 1.5rem;
+  margin: 1rem 1rem;
+  text-decoration: none;
 }
 
 .row {
@@ -36,6 +53,7 @@ input,
   border: 2px solid transparent;
   background-color: #f3f3f3;
 }
+
 .image {
   display: flex;
   flex-direction: column;
@@ -44,11 +62,6 @@ input,
 .image p {
   font-style: italic;
   font-size: 1rem;
-}
-
-h1 {
-  display: flex;
-  justify-content: center;
 }
 
 .output {
@@ -158,7 +171,7 @@ h1 {
   overflow: scroll;
 }
 .example {
-  margin: 4rem 0;
+  margin: 2rem 0;
 }
 
 .arrow-container {

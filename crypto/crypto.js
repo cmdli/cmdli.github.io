@@ -359,6 +359,67 @@ function railFenceEncrypt(inputs) {
   return output;
 }
 
+function railFenceDecrypt(inputs) {
+  const text = inputs[0].toUpperCase();
+  const numberOfRails = parseInt(inputs[1]);
+  if (!numberOfRails || numberOfRails < 2) {
+    return text;
+  }
+  let firstJump = 2 * (numberOfRails - 1);
+  let secondJump = 0;
+  let output = new Array(text.length);
+  let outputI = 0;
+  let usingFirstJump = true;
+  let i = 0;
+  let railI = 0;
+  while (i < text.length) {
+    if (outputI >= output.length) {
+      outputI = railI + 1;
+      railI++;
+      firstJump -= 2;
+      secondJump += 2;
+      usingFirstJump = true;
+    }
+    output[outputI] = text[i];
+    let jump = usingFirstJump ? firstJump : secondJump;
+    if (jump === 0) {
+      usingFirstJump = !usingFirstJump;
+      jump = usingFirstJump ? firstJump : secondJump;
+    }
+    outputI += jump;
+    i++;
+    usingFirstJump = !usingFirstJump;
+  }
+  return output.join("");
+}
+
+function simpleSubEncrypt(inputs) {
+  const text = inputs[0].toUpperCase();
+  const shifted = "A" + text.slice(0, text.length - 1);
+  return vigenereEncrypt([text, shifted]);
+}
+
+function simpleSubDecrypt(inputs) {
+  const text = inputs[0].toUpperCase();
+  if (text.length <= 1) {
+    return text;
+  }
+  let output = new Array(inputs.length);
+  output[0] = text[0];
+  for (let i = 1; i < text.length; i++) {
+    let textLetterI = letters.indexOf(text[i]);
+    let outputLetterI = letters.indexOf(output[i - 1]);
+    if (textLetterI >= 0 && outputLetterI >= 0) {
+      const nextI =
+        (textLetterI + outputLetterI + letters.length) % letters.length;
+      output[i] = letters[nextI];
+    } else {
+      output[i] = text[i];
+    }
+  }
+  return output.join("");
+}
+
 function scytaleEncrypt(inputs) {
   const text = inputs[0].toUpperCase();
   const numberOfRails = parseInt(inputs[1]);
@@ -369,7 +430,6 @@ function scytaleEncrypt(inputs) {
   let i = 0;
   let rail = 0;
   for (const letter of text) {
-    //console.log(i);
     output[i] = letter;
     i += numberOfRails;
     if (i >= output.length) {
@@ -400,6 +460,24 @@ function scytaleDecrypt(inputs) {
   return output.join("");
 }
 
+function networkEncrypt(text, key) {
+  for (let i = 0; i < 2; i++) {
+    let keyed = vigenereEncrypt([text, key]);
+    let substituted = simpleSubEncrypt([keyed]);
+    text = railFenceEncrypt([substituted, 5]);
+  }
+  return text;
+}
+
+function networkDecrypt(text, key) {
+  for (let i = 0; i < 5; i++) {
+    const descrambled = railFenceDecrypt([text, 5]);
+    const desubstituted = simpleSubDecrypt([descrambled]);
+    text = vigenereDecrypt([desubstituted, key]);
+  }
+  return text;
+}
+
 function getFrequencies(text) {
   const frequencies = {};
   for (const letter of text) {
@@ -421,22 +499,6 @@ function getFrequencies(text) {
   return frequencies;
 }
 
-function networkEncrypt(text, key) {
-  for (let i = 0; i < 5; i++) {
-    const keyed = vigenereEncrypt([text, key]);
-    text = scytaleEncrypt([keyed, 5]);
-  }
-  return text;
-}
-
-function networkDecrypt(text, key) {
-  for (let i = 0; i < 5; i++) {
-    const descrambled = scytaleDecrypt([text, 5]);
-    text = vigenereDecrypt([descrambled, key]);
-  }
-  return text;
-}
-
 function cleanupText(text) {
   text = text.toUpperCase();
   let output = "";
@@ -450,7 +512,6 @@ function cleanupText(text) {
 
 function splitText(text, modulo) {
   const groups = new Array(modulo).fill("");
-  console.log(groups);
   let i = 0;
   for (const letter of text) {
     groups[i] += letter;
@@ -462,12 +523,10 @@ function splitText(text, modulo) {
 setTimeout(() => {
   new Function("vigenere-encrypt", vigenereEncrypt);
   new Function("vigenere-decrypt", vigenereDecrypt);
-  new Function("vigenere-shift-encrypt", vigenereShiftEncrypt);
-  new Function("vigenere-shift-decrypt", vigenereShiftDecrypt);
-  new Function("cumulative-vigenere-encrypt", cumulativeVigenereEncrypt);
-  new Function("cumulative-vigenere-decrypt", cumulativeVigenereDecrypt);
   new Function("rail-fence-encrypt", railFenceEncrypt);
+  new Function("rail-fence-decrypt", railFenceDecrypt);
   new Function("caesar-interactive", caesarCipher);
+  new Function("caesar-decrypt", caesarDecrypt);
   new Graph("caesar-frequencies", (inputs) => {
     return getFrequencies(caesarCipher([appleWikipediaText].concat(inputs)));
   });
@@ -486,21 +545,25 @@ setTimeout(() => {
     () => getFrequencies(caesarCipher([appleWikipediaText, 5])),
     "Example Ciphertext"
   );
-  new Graph(
-    "vigenere-wikipedia-frequencies",
-    () => getFrequencies(vigenereEncrypt([appleWikipediaText, "LEMON"])),
-    "Frequency of letters after the Vigenere Cipher"
+  new Graph("vigenere-wikipedia-frequencies", (inputs) =>
+    getFrequencies(vigenereEncrypt([appleWikipediaText, inputs[0]]))
   );
   new Graph(
     "vigenere-first-group-frequencies",
-    () => {
-      const key = "LEMON";
+    (inputs) => {
+      const key = inputs[0];
+      if (!key) {
+        return getFrequencies(appleWikipediaText);
+      }
       const ciphertext = vigenereEncrypt([appleWikipediaText, key]);
       const groups = splitText(ciphertext, key.length);
       return getFrequencies(groups[0]);
     },
     "First Letter Group"
   );
+  new Graph("network-frequencies", (inputs) => {
+    return getFrequencies(networkEncrypt(appleWikipediaText, inputs[0]));
+  });
 }, 100);
 
 appleWikipediaText = cleanupText(`

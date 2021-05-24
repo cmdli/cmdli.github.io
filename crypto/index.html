@@ -2,422 +2,553 @@
 <html>
 
 <head>
-    <title>Examples in Cryptography</title>
+    <title>Cryptography from the Ground Up</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat">
     <link href="crypto.css" rel="stylesheet">
+    <meta charset="utf-8" />
 </head>
 
 <body>
-    <h1>Basics of Cryptography</h1>
+    <div class="titlebar">
+        <a class="home-link" href="https://cmdli.net">Chris de la Iglesia</a>
+    </div>
 
-    <h2>Starting at the Top: The Caesar Cipher</h2>
-    <div id="caesar-intro-container">
-        <div id="caesar-intro-animation">
-            <div>APPLES ARE TASTY</div>
-            <div>BQQMFT BSF UBTUZ</div>
-            <div>CRRNGU CTG VCUVA</div>
-        </div>
-    </div>
-    <p>
-        The <strong>Caesar Cipher</strong> is one of the oldest and simplest methods of encryption. The basic concept is
-        incredibly
-        simple; just take each letter and shift it up or down the alphabet by a known number of places.
-    </p>
-    <p>
-        For example, shifting forward by three means A becomes D, G becomes J, M becomes P. To get the original message,
-        just move
-        back down the alphabet by the same number. The resulting message doesn't resemble the original at all. Easy,
-        right?
-    </p>
-    <p>
-        Even with this, we can start to see the outline of cryptography: the original message, or
-        <strong>plaintext</strong>, the
-        obfuscated resulting message, or <strong>ciphertext</strong>, and the number to shift by, or
-        the <strong>key</strong>.
-    </p>
-    <div class="example">
-        <div id="caesar-interactive" class="function">
-            <div class="side left">
-                <div class="labelled-data">
-                    <div class="label">plaintext</div>
-                    <input type="text" class="data" value="APPLE">
-                </div>
-                <div class="symbol">+</div>
-                <div class="labelled-data short">
-                    <div class="label">key</div>
-                    <input type="number" value="2" class="data">
-                </div>
-            </div>
-            <div class="arrow-container">
-                <div class="symbol">➔</div>
-            </div>
-            <div class="side">
-                <div class="labelled-data">
-                    <div class="label">ciphertext</div>
-                    <div id="output" class="data data-output"></div>
-                </div>
-            </div>
-        </div>
-        <div id="caesar-decrypt" class="function">
-            <div class="side left">
-                <div class="labelled-data">
-                    <div class="label">ciphertext</div>
-                    <input type="text" class="data" value="APPLE">
-                </div>
-                <div class="symbol">-</div>
-                <div class="labelled-data short">
-                    <div class="label">key</div>
-                    <input type="number" value="2" class="data">
-                </div>
-            </div>
-            <div class="arrow-container">
-                <div class="symbol">➔</div>
-            </div>
-            <div class="side">
-                <div class="labelled-data">
-                    <div class="label">plaintext</div>
-                    <div id="output" class="data data-output"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <p>
-        Using this simple example, let's think about how to break it. If we were given just some ciphertext, such as
-        <em>KJQNSJ</em>, how might we figure out the original plaintext? Well, with only 26 possible ways of
-        shifting letters up
-        and down, it becomes trivial to try all the ways and retrieve the original message.
-    </p>
-    <p>
-        This is one way that cryptography can fall apart: effective key space size. With only 26 ways of encrypting any
-        piece of text, our key space is incredibly small, even small enough to be broken by hand. So, how can we
-        increase the size of our key space so an attacker can’t simply try all combinations?
-    </p>
-    </p>
-    <h2>State of the Art (for the 16th century): The Vigenère Cipher</h2>
-    <p>
-        The Vigenére cipher, named after Blase de Vigenére, was invented by Giovan Battista Bellaso in 1553 and could
-        not be cracked for 300 years. The improvement on the Caesar cipher is relatively simple: instead of shifting all
-        the letters by the same amount, why not shift each letter by a different amount?
-    </p>
-    <p>
-        If every letter shifts by a different amount, it becomes impossible to tell what the original letter was without
-        knowing how it was shifted.
-    </p>
-    <div class="image">
-        <img src="images/random-keys.png" />
-        <p>Unique shifts for every letter</p>
-    </div>
-    <p>
-        In practice, shifting each letter by a unique amount becomes impractical. After all, if you could securely
-        communicate how much to shift every letter in a message, you might as well just communicate the real message.
-        So, the Vigenere Cipher goes halfway: it defines a set of shifts that repeats, encrypting the whole message with
-        a relatively small key.
-    </p>
-    <p>
-        In practice, this set of shifts is represented by a simple, easy to remember word. Each letter in the word
-        corresponds to shifting the message by an amount equal to that letters place in the alphabet. For example, the
-        letter A means to shift by 0 (keeping the original letter), the letter D means to shift by 3, and so on.
-    </p>
-    <div class="image">
-        <img src="images/lemon-key.png" />
-        <p>Every letter represents a shift</p>
-    </div>
-    <p>
-        If the key word is <em>LEMON</em>, then you would shift the first letter of the plaintext by 11, the second
-        letter by 4,
-        the third letter by 12, and so on. The key point here, which will introduce problems later on, is that we repeat
-        the keyword to encrypt every section of the plaintext.
-    </p>
-    <div class="image">
-        <img src="images/vigenere-example.png" />
-        <p>Message being encrypted with the Vigènere Cipher</p>
-    </div>
-    <p>
-        This forms a much more complex cipher with many more key options, but can still be done by hand, oftentimes with
-        the help of a table called a Tabula Recta. You can try it for yourself here:
-    </p>
+    <div class="content">
+        <h1>Cryptography from the Ground Up</h1>
+        <p class="subtitle">May 23 2021</p>
+        <p>
+            One of the most interesting and useful things computers can do for us is cryptography. With cryptography, we
+            can
+            hide messages, secure access to important servers, and even build entire currencies. Cryptography not only
+            defines our modern world, but is a big part of how we will build the world of the future.
+        </p>
+        <p>
+            However, unless you want to dedicate years and a PhD to studying the subject, the actual workings of
+            cryptography can be hard to learn. It can involve a lot of pitfalls and if you dare build from scratch, you
+            are
+            bound to make a fool of yourself. Why?
+        </p>
+        <p>
+            In my opinion, it comes down to <em>history</em>. Cryptography has had centuries of methods that have
+            been
+            made, broken, and remade again. Most tutorials on cryptography focus on the <em>what</em>: do
+            this, don’t do
+            that, follow
+            the rules. But they skip over the <em>why</em>: why do we do the things we do? What are we trying to avoid?
+        </p>
+        <p>
+            To understand the why, we need to understand how we got here in the first place. And to do that, let’s set
+            computers to the side for the moment and delve into the world of classical cryptography.
+        </p>
 
-    <div class="example">
-        <div id="vigenere-encrypt" class="function">
-            <div class="side left">
-                <div class="labelled-data">
-                    <div class="label">plaintext</div>
-                    <input type="text" class="data" value="APPLESARETASTY">
-                </div>
-                <div class="symbol">+</div>
-                <div class="labelled-data">
-                    <div class="label">key</div>
-                    <input type="text" class="data" value="LEMON">
-                </div>
-            </div>
-            <div class="arrow-container">
-                <div class="symbol">➔</div>
-            </div>
-            <div class="side">
-                <div class="labelled-data">
-                    <div class="label">ciphertext</div>
-                    <div id="output" class="data data-output"></div>
-                </div>
-            </div>
-        </div>
-        <div id="vigenere-decrypt" class="function">
-            <div class="side left">
-                <div class="labelled-data">
-                    <div class="label">ciphertext</div>
-                    <input type="text" class="data" value="APPLESARETASTY">
-                </div>
-                <div class="symbol">-</div>
-                <div class="labelled-data">
-                    <div class="label">key</div>
-                    <input type="text" class="data" value="LEMON">
-                </div>
-            </div>
-            <div class="arrow-container">
-                <div class="symbol">➔</div>
-            </div>
-            <div class="side">
-                <div class="labelled-data">
-                    <div class="label">plaintext</div>
-                    <div id="output" class="data data-output"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <p>
-        Now, how can we break this? In order to decrypt the message, we would need to know every letter in our key word
-        rather than just one shift for the entire message. Our effective key space size is now 26<sup>5</sup>, which is
-        much
-        larger than the 26 of the Caesar cipher. This can no longer be broken by hand, which is why this cipher was not
-        broken for centuries.
-    </p>
-    <p>
-        So, what can we do? Now that the brute force solution is out, we need to be a bit clever about deducing what the
-        key is. In order to do that, we need to learn about <strong>frequency analysis</strong>.
-    </p>
-    <h2>More Accurate Guesses: Frequency Analysis</h2>
-    <p>
-        Let’s go back to the Caesar Cipher for a second. Let’s say we choose not to brute force the solution, what can
-        we do? What information can we glean just from the ciphertext? Well, since every letter in the plaintext
-        corresponds to a certain letter in the ciphertext (A corresponds to F, for example), the frequency of each
-        letter is maintained.
-    </p>
-    <div id="english-frequencies" class="graph-example">
-        <div class="graph">
-            <canvas width="400" height="400"></canvas>
-        </div>
-    </div>
-    <p>
-        In most languages, each letter occurs at a fairly consistent rate. For English, the distribution is seen above.
-        If we have a large enough ciphertext, we can calculate the frequency of the letters and match them up to the
-        frequency in normal English, and have a pretty good idea of what letters substitute for what.
-    </p>
-    <div class="example image">
-        <div class="row">
-            <div id="english-translation-frequencies" class="graph-example">
-                <div class="graph">
-                    <canvas width="400" height="400"></canvas>
-                </div>
-            </div>
-            <div class="symbol">➔</div>
-            <div id="caesar-wikipedia-frequencies" class="graph-example">
-                <div class="graph">
-                    <canvas width="400" height="400"></canvas>
-                </div>
+        <h2>Starting at the Top: The Caesar Cipher</h2>
+        <div id="caesar-intro-container">
+            <div id="caesar-intro-animation">
+                <div>APPLES ARE TASTY</div>
+                <div>BQQMFT BSF UBTUZ</div>
+                <div>CRRNGU CTG VCUVA</div>
             </div>
         </div>
         <p>
-            Translation of frequencies from original text
+            The <strong>Caesar Cipher</strong> is one of the oldest and simplest methods of encryption. The basic
+            concept is
+            incredibly
+            simple; just take each letter and shift it up or down the alphabet by a known number of places.
         </p>
-    </div>
-    <p>
-        In this example, I took the <a href="https://en.wikipedia.org/wiki/Apple">Apple page from Wikipedia</a> and
-        encrypted it
-        with the Caesar cipher. Looking at the frequencies, we can do a bit of analysis and guess that <em>J</em>
-        corresponds to
-        <em>E</em> and <em>A</em> corresponds to <em>F</em>, so the Caesar shift value is probably five.
-    </p>
-    <p>
-        So, how does this help us with the Vigenere Cipher? At first glance, frequency analysis isn’t useful because the
-        letters are encrypted with different shifts. This hides the frequency data of the original text because each
-        letter can be using different shifts. Here, I encrypted the Apple Wikipedia page with the key word
-        <em>LEMON</em>, and
-        the frequencies no longer line up with English.
-    </p>
-    <div class="example image">
-        <div id="vigenere-wikipedia-frequencies" class="graph-example">
+        <p>
+            For example, shifting forward by three means A becomes D, G becomes J, M becomes P. To get the original
+            message,
+            just move
+            back down the alphabet by the same number. The resulting message doesn't resemble the original at all. Easy,
+            right?
+        </p>
+        <p>
+            Even with this, we can start to see the outline of cryptography: the original message, or
+            <strong>plaintext</strong>, the
+            obfuscated resulting message, or <strong>ciphertext</strong>, and the number to shift by, or
+            the <strong>key</strong>.
+        </p>
+        <div class="example image">
+            <div id="caesar-interactive" class="function">
+                <div class="side left">
+                    <div class="labelled-data">
+                        <div class="label">plaintext</div>
+                        <input type="text" class="data" value="APPLE">
+                    </div>
+                    <div class="symbol">+</div>
+                    <div class="labelled-data short">
+                        <div class="label">key</div>
+                        <input type="number" value="2" class="data">
+                    </div>
+                </div>
+                <div class="arrow-container">
+                    <div class="symbol">➔</div>
+                </div>
+                <div class="side">
+                    <div class="labelled-data">
+                        <div class="label">ciphertext</div>
+                        <div id="output" class="data data-output"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="caesar-decrypt" class="function">
+                <div class="side left">
+                    <div class="labelled-data">
+                        <div class="label">ciphertext</div>
+                        <input type="text" class="data" value="CRRNG">
+                    </div>
+                    <div class="symbol">-</div>
+                    <div class="labelled-data short">
+                        <div class="label">key</div>
+                        <input type="number" value="2" class="data">
+                    </div>
+                </div>
+                <div class="arrow-container">
+                    <div class="symbol">➔</div>
+                </div>
+                <div class="side">
+                    <div class="labelled-data">
+                        <div class="label">plaintext</div>
+                        <div id="output" class="data data-output"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Interactive Caesar Cipher</p>
+        </div>
+        <p>
+            Using this simple example, lets think about how to break the cipher and decrypt an unknown message. If we
+            were
+            given just some ciphertext, such as <em>KJQNSJ</em>, how might we figure out the original plaintext? Well,
+            with
+            only 26
+            possible ways of shifting letters up and down, it becomes trivial to simply try all the ways and recognize
+            the
+            original message.
+        </p>
+        <p>
+            This leads us to one of the first requirements for an effective encryption scheme: <strong>a large effective
+                key
+                space
+                size</strong>. With only 26 ways of encrypting any piece of text, our key space is incredibly small,
+            even
+            small enough to
+            be broken by hand. So, how can we increase the size of our key space so an attacker can’t simply try all
+            combinations?
+        </p>
+        </p>
+        <h2>State of the Art (for the 16th century): The Vigenère Cipher</h2>
+        <p>
+            The Vigenère cipher, named after Blase de Vigenère, was invented by Giovan Battista Bellaso in 1553 and
+            could
+            not be cracked for 300 years. The improvement on the Caesar cipher is relatively simple.
+        </p>
+        <p>
+            Instead of shifting all the letters by the same amount, why not shift each letter by a different amount? If
+            every letter shifts by a different amount, it becomes impossible to tell what the original letter was
+            without
+            knowing how it was shifted.
+        </p>
+        <div class="image">
+            <img src="images/random-keys.png" />
+            <p>Unique shifts for every letter</p>
+        </div>
+        <p>
+            In practice, shifting each letter by a unique amount becomes impractical. After all, if you could securely
+            communicate how much to shift every letter in a message, you might as well just communicate the real
+            message.
+            So, the Vigenère Cipher goes halfway: it defines a set of shifts that repeats, encrypting the whole message
+            with
+            a relatively small key.
+        </p>
+        <p>
+            In practice, this set of shifts is represented by a simple, easy to remember word. Each letter in the word
+            corresponds to a shift equal to that letter’s place in the alphabet. For example, the letter A means to
+            shift by
+            0 (keeping the original letter), the letter D means to shift by 3, and so on.
+        </p>
+        <div class="image">
+            <img src="images/lemon-key.png" />
+            <p>Every letter represents a shift</p>
+        </div>
+        <p>
+            If the key word is LEMON, then you would shift the first letter of the plaintext by 11, the second letter by
+            4,
+            the third letter by 12, and so on. The key point here is that we repeat the keyword to encrypt every section
+            of
+            the plaintext. This introduces problems, as we will see later on, but greatly simplifies the
+            encryption/decryption process.
+        </p>
+        <div class="image">
+            <img src="images/vigenere-example.png" />
+            <p>Message being encrypted with the Vigènere Cipher</p>
+        </div>
+        <p>
+            This forms a much more complex cipher with many more key options, but can still be done by hand, oftentimes
+            with
+            the help of a table called a <a href="https://en.wikipedia.org/wiki/Tabula_recta">Tabula Recta</a>. You can
+            try
+            it for yourself here:
+        </p>
+
+        <div class="example image">
+            <div id="vigenere-encrypt" class="function">
+                <div class="side left">
+                    <div class="labelled-data">
+                        <div class="label">plaintext</div>
+                        <input type="text" class="data" value="APPLESARETASTY">
+                    </div>
+                    <div class="symbol">+</div>
+                    <div class="labelled-data">
+                        <div class="label">key</div>
+                        <input type="text" class="data" value="LEMON">
+                    </div>
+                </div>
+                <div class="arrow-container">
+                    <div class="symbol">➔</div>
+                </div>
+                <div class="side">
+                    <div class="labelled-data">
+                        <div class="label">ciphertext</div>
+                        <div id="output" class="data data-output"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="vigenere-decrypt" class="function">
+                <div class="side left">
+                    <div class="labelled-data">
+                        <div class="label">ciphertext</div>
+                        <input type="text" class="data" value="APPLESARETASTY">
+                    </div>
+                    <div class="symbol">-</div>
+                    <div class="labelled-data">
+                        <div class="label">key</div>
+                        <input type="text" class="data" value="LEMON">
+                    </div>
+                </div>
+                <div class="arrow-container">
+                    <div class="symbol">➔</div>
+                </div>
+                <div class="side">
+                    <div class="labelled-data">
+                        <div class="label">plaintext</div>
+                        <div id="output" class="data data-output"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Interactive Vigenère Cipher</p>
+        </div>
+        <p>
+            Now, how can we break this? In order to decrypt the message, we would need to know every letter in our key
+            word
+            rather than just one shift for the entire message. Our effective key space size is now 26<sup>5</sup>, which
+            is
+            much
+            larger than the 26 of the Caesar cipher. This can no longer be broken by hand, which is why this cipher was
+            not
+            broken for centuries.
+        </p>
+        <p>
+            So, what can we do? Now that the brute force solution is out, we need to be a bit clever about deducing what
+            the
+            key is. In order to do that, we need to learn about <strong>frequency analysis</strong>.
+        </p>
+        <h2>More Accurate Guesses: Frequency Analysis</h2>
+        <p>
+            Let’s go back to the Caesar cipher for a moment. Let’s say we choose not to brute force the solution, what
+            can
+            we do? What information can we glean just from the ciphertext?
+        </p>
+        <p>
+            Well, since every letter in the plaintext
+            corresponds to a certain letter in the ciphertext (<em>A</em> corresponds to <em>F</em>, for example), the
+            <strong>frequency</strong> of each
+            letter is maintained.
+        </p>
+        <div id="english-frequencies" class="graph-example">
             <div class="graph">
                 <canvas width="400" height="400"></canvas>
             </div>
         </div>
         <p>
-            The frequencies are hidden
+            In most languages, each letter occurs at a fairly consistent rate. For English, the distribution is seen
+            above.
+            If we have a large enough ciphertext, we can calculate the frequency of the letters and match them up to the
+            frequency in normal English, and have a pretty good idea of what letters substitute for what.
         </p>
-    </div>
-    <p>
-        However, the Vigenere cipher has a fatal flaw: the set of shifts repeats. Take our example with <em>LEMON</em>
-        as the key
-        word. The first, sixth, and eleventh letter of our plaintext are all encrypted using the letter <em>L</em>.
-        Every fifth
-        letter ends up using the same shift, which means that we essentially have a set of five Caesar ciphers.
-    </p>
-    <p>
-        If we know the length of the key word then we can separate out the letters into separate groups and run
-        frequency analysis on each group to find the shift. Putting it all back together gets out our key word. Taking a
-        look at the first group of letters, we can see that <em>P</em> is the most common, which is just <em>E</em>
-        shifted by <em>L</em>.
-    </p>
-    <div class="example image">
-        <div id="vigenere-first-group-frequencies" class="graph-example">
+        <div class="example image">
+            <div class="row">
+                <div id="english-translation-frequencies" class="graph-example">
+                    <div class="graph">
+                        <canvas width="400" height="400"></canvas>
+                    </div>
+                </div>
+                <div class="symbol">➔</div>
+                <div id="caesar-wikipedia-frequencies" class="graph-example">
+                    <div class="graph">
+                        <canvas width="400" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
+            <p>
+                Translation of frequencies from original text
+            </p>
+        </div>
+        <p>
+            In this example, I took the <a href="https://en.wikipedia.org/wiki/Apple">Apple page from Wikipedia</a> and
+            encrypted it
+            with the Caesar cipher. Looking at the frequencies, we can do a bit of analysis and guess that <em>J</em>
+            corresponds to
+            <em>E</em> and <em>A</em> corresponds to <em>F</em>, so the Caesar shift value is probably five.
+        </p>
+        <p>
+            So, how does this help us with the Vigenère Cipher? At first glance, frequency analysis isn’t useful because
+            the
+            letters are encrypted with different shifts. This hides the frequency data of the original text because each
+            letter can be using different shifts. Here, I encrypted the Apple Wikipedia page with the key word
+            <em>LEMON</em>, and
+            the frequencies no longer line up with English.
+        </p>
+        <div class="example image">
+            <div id="vigenere-wikipedia-frequencies" class="graph-example">
+                <div class="labelled-data">
+                    <div class="label">Vigenère Cipher key</div>
+                    <input type="text" value="LEMON" class="data">
+                </div>
+                <div class="graph">
+                    <canvas width="400" height="400"></canvas>
+                </div>
+            </div>
+            <p>
+                The frequencies are distorted
+            </p>
+        </div>
+        <p>
+            However, the Vigenère cipher has a fatal flaw: the set of shifts repeats. Take our example with
+            <em>LEMON</em>
+            as the key
+            word. The first, sixth, and eleventh letter of our plaintext are all encrypted using the letter <em>L</em>.
+            Every fifth
+            letter ends up using the same shift, which means that we essentially have a set of five Caesar ciphers.
+        </p>
+        <p>
+            If we know the length of the key word then we can separate out the letters into separate groups and run
+            frequency analysis on each group to find the shift. Putting it all back together gets out our key word.
+            Taking a
+            look at the first group of letters, we can see that <em>P</em> is the most common, which is just <em>E</em>
+            shifted by <em>L</em>.
+        </p>
+        <div class="example image">
+            <div id="vigenere-first-group-frequencies" class="graph-example">
+                <div class="labelled-data">
+                    <div class="label">Vigenère Cipher key</div>
+                    <input type="text" value="LEMON" class="data">
+                </div>
+                <div class="graph">
+                    <canvas width="400" height="400"></canvas>
+                </div>
+            </div>
+            <p>
+                The frequency pattern returns
+            </p>
+        </div>
+        <p>
+            This does require us to find the length of the key word, but we can use separate analysis for that. To get
+            the
+            length, we can use <a href="https://en.wikipedia.org/wiki/Kasiski_examination">Kasiski examination</a>
+            (named
+            after Friedrich Kasiski, the first person to publish an attack
+            on the Vigenère cipher).
+        </p>
+        <p>
+            Just by chance, the same plaintext will be encrypted with the same parts of the key word, forming repeating
+            sections of text. By counting the distance between the sections, we know that this distance must be a
+            multiple
+            of the length of our key word.
+        </p>
+        <div class="example image">
+            <img src="images/kasiski-examination.png" width="700" />
+            <p>Repeating sections of text</p>
+        </div>
+        <p>
+            In this example, if the distance between sections is 32, then the key word much be of length 1, 2, 4, 8, 16,
+            or
+            32.
+            Multiple repeated sections give us multiple distances, further reducing the possible lengths of the key
+            word.
+        </p>
+        <p>
+            None of this is guaranteed. The repeated sections could be a coincidence, the frequency analysis could be
+            off,
+            we might not even have enough text to make an accurate guess.
+        </p>
+        <p>
+            However, the point of an attack on encryption is not to break it in one step, but to <em>make it easier to
+                break</em>.
+            Simply gaining partial knowledge of the key word or the plaintext is enough to allow us to test multiple
+            likely
+            options
+            and brute force the solution.
+        </p>
+        <h2>How to defend against frequency analysis</h2>
+        <p>
+            The core reason that frequency analysis works here is that every letter in the output ciphertext depends on
+            exactly one letter in the key word and one letter in the plaintext. This makes it possible to isolate the
+            portion of ciphertext that use the same letter from the key word and then that portion maintains the same
+            frequency signature as the original text.
+        </p>
+        <p>
+            To put some theory to this, this means that the Vigenère cipher fails both <strong>confusion</strong> and
+            <strong>diffusion</strong>. In
+            simple terms, <strong>confusion</strong> means that every letter of the output depends multiple parts of the
+            key
+            and
+            <strong>diffusion</strong> means that every letter of the output depends on many parts of the plaintext.
+        </p>
+        <p>
+            How do we fix this? We need to find a way for every letter of the output to depend on multiple parts of the
+            plaintext and key. The traditional way to do this is to “mix up” the input letters in a deterministic way
+            using
+            a <strong>substitution-permutation network</strong>.
+        </p>
+        <div class="image">
+            <img width="500" src="images/sp-network.png" />
+            <p>From Wikipedia, By GaborPete - Own work, CC BY-SA 3.0, <a
+                    href="https://commons.wikimedia.org/w/index.php?curid=6420152">Link</a></p>
+        </div>
+        <p>
+            The SP-network mixes up our inputs and applies our Vigenère cipher several times, mixing up the data
+            inbetween
+            each application using substituion and permutation ciphers. A <strong>substitution cipher</strong> swaps out
+            blocks of text
+            in a deterministic way, where changing one letter of the input block changes multiple letters of the output
+            block. A <strong>permutation cipher</strong> then swaps those blocks around in the input, so the next
+            application of the key
+            will apply to completely new parts of the text.
+        </p>
+        <p>
+            This network satisfies both confusion and diffusion, because the substitution cipher causes every letter of
+            our output to depend on multiple input letters and the permutation cipher causes every letter to depend on
+            multiple parts of the key. Both of these properties help prevent frequency analysis and other forms of
+            attacks
+            because there is less of an obvious relation between the two.
+        </p>
+        <p>
+            So, what ciphers can we use for this? One simple permutation cipher we can use is the Rail Fence cipher,
+            which
+            writes the message in a zigzag pattern across multiple lines and then reads them horizontally. This is easy
+            to
+            understand and, continuing with our theme of classical cryptography, can easily be done by hand.
+            Unfortunately,
+            it’s very easy to break but that will be fine as we won’t be using it alone.
+        </p>
+        <div class="image">
+            <img width="700" src="images/rail-cipher.png" />
+            <p>Rail Fence Cipher</p>
+        </div>
+        <p>
+            A simple substiution cipher we can use is just to shift every letter in the message by the letter preceding
+            it.
+            This means that at every step, every output letter will depend on two input letters, and since we are
+            applying
+            it multiple times the output letter will end up depending on many input letters. This is fairly weak on its
+            own,
+            but it can also be easily computed by hand.
+        </p>
+        <div class="image">
+            <img src="images/substitution-cipher.png" />
+            <p>Simple Substitution Cipher</p>
+        </div>
+        <p>
+            By applying the Vigenère Cipher and our substitution and permutation ciphers in alternating patterns, we can
+            get
+            an encryption scheme that is much stronger than the sum of its parts. The Vigenère cipher obscures the text,
+            and
+            our SP-network obscures the relation between our ciphertext and the key or plaintext.
+        </p>
+        <div class="example image">
+            <div id="network-frequencies" class="graph-example">
+                <div class="labelled-data">
+                    <div class="label">Vigenère Cipher key</div>
+                    <input type="text" value="LEMON" class="data">
+                </div>
+                <div class="graph">
+                    <canvas width="400" height="400"></canvas>
+                </div>
+            </div>
+            <p>
+                Frequencies from our encryption network
+            </p>
+        </div>
+        <p>
+            As we can see, our frequency curve is very flat and contains very little information. With better a better
+            SP-network and a better cipher than Vigenère, we could get this much more uniform, but we’ll leave that up
+            to
+            the computers.
+        </p>
+        <h2>Conclusion: Should we use any of this?</h2>
+        <p>
+            Hell no! One of the key takeaways from all of this is that the attacks on encryption schemes are not obvious
+            up
+            front, and the best way to avoid such attacks is to use well known, secure, and carefully designed
+            algorithms
+            written by the people who know the most about modern attacks and how to prevent them.
+        </p>
+
+
+        <h1>Old Stuff</h1>
+        <div id="caesar-frequencies" class="graph-example">
+            <div class="labelled-data">
+                <div class="label">Caesar Cipher key</div>
+                <input type="text" value="0" class="data">
+            </div>
             <div class="graph">
                 <canvas width="400" height="400"></canvas>
             </div>
         </div>
-        <p>
-            The frequency pattern returns
-        </p>
-    </div>
-    <p>
-        This does require us to find the length of the key word, but we can use separate analysis for that. To get the
-        length, we can use <a href="https://en.wikipedia.org/wiki/Kasiski_examination">Kasiski examination</a> (named
-        after Friedrich Kasiski, the first person to publish an attack
-        on the Vigenere cipher).
-    </p>
-    <p>
-        Just by chance, the same plaintext will be encrypted with the same parts of the key word, forming repeating
-        sections of text. By counting the distance between the sections, we know that this distance must be a multiple
-        of the length of our key word.
-    </p>
-    <div class="example image">
-        <img src="images/kasiski-examination.png" width="700" />
-        <p>Repeating sections of text</p>
-    </div>
-    <p>
-        In this example, if the distance between sections is 32, then the key word much be of length 1, 2, 4, 8, 16, or
-        32.
-        Multiple repeated sections give us multiple distances, further reducing the possible lengths of the key word.
-    </p>
-    <p>
-        None of this is guaranteed. The repeated sections could be a coincidence, the frequency analysis could be off,
-        we might not even have enough text to make an accurate guess.
-    </p>
-    <p>
-        However, the point of an attack on encryption is not to break it in one step, but to <em>make it easier to
-            break</em>.
-        Simply gaining partial knowledge of the key word or the plaintext is enough to allow us to test multiple likely
-        options
-        and brute force the solution.
-    </p>
-    <h2>How to defend against frequency analysis</h2>
-    <p>
-        The core reason that frequency analysis works here is that every letter in the output ciphertext depends on
-        exactly one letter in the key word and one letter in the plaintext. This makes it possible to isolate the
-        portion of ciphertext that use the same letter from the key word and then that portion maintains the same
-        frequency signature as the original text.
-    </p>
-    <p>
-        To put some theory to this, this means that the Vigenere cipher fails both <strong>confusion</strong> and
-        <strong>diffusion</strong>. In
-        simple terms, <strong>confusion</strong> means that every letter of the output depends multiple parts of the key
-        and
-        <strong>diffusion</strong> means that every letter of the output depends on many parts of the plaintext.
-    </p>
-    <p>
-        How do we fix this? We need to find a way for every letter of the output to depend on multiple parts of the
-        plaintext and key. The traditional way to do this is to “mix up” the input letters in a deterministic way using
-        a *transposition cipher* and apply our Vigenere cipher multiple times repeatedly, applying the same key to the
-        mixed up input. This forms what is known as a *substitution-permutation network*, with the Vigenere cipher
-        forming the substitution and the transposition cipher as the permutation.
-    </p>
-
-    <h1>Old Stuff</h1>
-    <div id="caesar-frequencies" class="graph-example">
-        <div class="labelled-data">
-            <div class="label">Caesar Cipher key</div>
-            <input type="text" value="0" class="data">
-        </div>
-        <div class="graph">
-            <canvas width="400" height="400"></canvas>
-        </div>
-    </div>
-    <h2>Vigenere Cipher, Shift, Vigenere Cipher</h2>
-    <p>
-        This method encrypts the text by first applying the Vigenere cipher, then transposing the result
-        by moving each letter a number of places to the right (e.g. |ATTACKATDAWN| becomes AWN|ATTACKATD),
-        then applying the Vigenere cipher again.
-    </p>
-    <p>This is significantly worse than doing Vigenere cipher twice with different keywords, and only very slightly
-        better than a single Vigenere Cipher. The second cipher can be broken as easily as
-        a single Vigenere Cipher, and then the key can be deduced.</p>
-    <h4>Encrypt</h4>
-    <div id="vigenere-shift-encrypt" class="function">
-        <div class="inputs">
-            <div class="input">
-                Text:<input type="text">
-            </div>
-            <div class="input">
-                Cipher Word:<input type="text">
-            </div>
-            <div class="input">
-                Shift:<input type="number">
+        <h2>Cumulative Vigenère Cipher</h2>
+        <h4>Encrypt</h4>
+        <div id="cumulative-vigenere-encrypt" class="function">
+            <div class="inputs">
+                <div class="input">
+                    Text:<input type="text">
+                </div>
+                <div class="input">
+                    Cipher Word:<input type="text">
+                </div>
             </div>
         </div>
-    </div>
-    <h4>Decrypt</h4>
-    <div id="vigenere-shift-decrypt" class="function">
-        <div class="inputs">
-            <div class="input">
-                Text:<input type="text">
-            </div>
-            <div class="input">
-                Cipher Word:<input type="text">
-            </div>
-            <div class="input">
-                Shift:<input type="number">
+        <h4>Decrypt</h4>
+        <div id="cumulative-vigenere-decrypt" class="function">
+            <div class="inputs">
+                <div class="input">
+                    Text:<input type="text">
+                </div>
+                <div class="input">
+                    Cipher Word:<input type="text">
+                </div>
             </div>
         </div>
-    </div>
-    <h2>Cumulative Vigenere Cipher</h2>
-    <h4>Encrypt</h4>
-    <div id="cumulative-vigenere-encrypt" class="function">
-        <div class="inputs">
-            <div class="input">
-                Text:<input type="text">
-            </div>
-            <div class="input">
-                Cipher Word:<input type="text">
-            </div>
-        </div>
-    </div>
-    <h4>Decrypt</h4>
-    <div id="cumulative-vigenere-decrypt" class="function">
-        <div class="inputs">
-            <div class="input">
-                Text:<input type="text">
-            </div>
-            <div class="input">
-                Cipher Word:<input type="text">
+        <h2>Rail Fence Cipher</h2>
+        <h4>Encrypt</h4>
+        <div id="rail-fence-encrypt" class="function">
+            <div class="inputs">
+                <div class="input">
+                    Text:<input type="text">
+                </div>
+                <div class="input">
+                    Number of Rails:<input type="number">
+                </div>
             </div>
         </div>
-    </div>
-    <h2>Rail Fence Cipher</h2>
-    <h4>Encrypt</h4>
-    <div id="rail-fence-encrypt" class="function">
-        <div class="inputs">
-            <div class="input">
-                Text:<input type="text">
-            </div>
-            <div class="input">
-                Number of Rails:<input type="number">
-            </div>
-        </div>
-    </div>
-    <h4>Decrypt</h4>
-    <div id="rail-fence-decrypt" class="function">
-        <div class="inputs">
-            <div class="input">
-                Text:<input type="text">
-            </div>
-            <div class="input">
-                Number of Rails:<input type="number">
+        <h4>Decrypt</h4>
+        <div id="rail-fence-decrypt" class="function">
+            <div class="inputs">
+                <div class="input">
+                    Text:<input type="text">
+                </div>
+                <div class="input">
+                    Number of Rails:<input type="number">
+                </div>
             </div>
         </div>
     </div>
