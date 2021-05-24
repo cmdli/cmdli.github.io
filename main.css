@@ -1,20 +1,23 @@
-body {
+.content {
   display: flex;
   align-items: center;
-  font-family: verdana, sans-serif;
-  max-width: 30em;
-  margin: 3em auto;
-  padding: 0 .62em;
+  flex-direction: row;
 }
+
 p {
-	margin:0 0 10px;
+  margin: 0 0 10px;
 }
-h1,h2,h3,h4,h5 {
-	line-height: 1.2;
+h1,
+h2,
+h3,
+h4,
+h5 {
+  line-height: 1.2;
 }
 .picture {
   flex: 1;
   margin-right: 2em;
+  border-radius: 5px;
 }
 .picture img {
   width: 200px;
@@ -22,4 +25,7 @@ h1,h2,h3,h4,h5 {
 }
 .info {
   flex: 2;
+}
+a:hover() {
+  color: gray;
 }

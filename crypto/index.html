@@ -11,10 +11,10 @@
 
 <body>
     <div class="titlebar">
-        <a class="home-link" href="https://cmdli.net">Chris de la Iglesia</a>
+        <a class="home-link" href="/">Chris de la Iglesia</a>
         <div>
-            <a href="https://cmdli.net">Home</a>
-            <a href="https://cmdli.net/blog">Blog</a>
+            <a href="/">Home</a>
+            <a href="/blog">Blog</a>
             <a href="https://github.com/cmdli">Github</a>
         </div>
     </div>
@@ -424,7 +424,10 @@
         <p>
             The SP-network mixes up our inputs and applies our Vigenère cipher several times, mixing up the data
             inbetween
-            each application using substituion and permutation ciphers. A <strong>substitution cipher</strong> swaps out
+            each application using substituion and permutation ciphers.
+        </p>
+        <p>
+            A <strong>substitution cipher</strong> swaps out
             blocks of text
             in a deterministic way, where changing one letter of the input block changes multiple letters of the output
             block. A <strong>permutation cipher</strong> then swaps those blocks around in the input, so the next
@@ -487,76 +490,27 @@
         </div>
         <p>
             As we can see, our frequency curve is very flat and contains very little information. With better a better
-            SP-network and a better cipher than Vigenère, we could get this much more uniform, but we’ll leave that up
-            to
-            the computers.
+            SP-network, a better cipher than Vigenère, and much larger keys we could get this much more uniform, but
+            we’ll leave that to the computers.
         </p>
         <h2>Conclusion: Should we use any of this?</h2>
         <p>
             Hell no! One of the key takeaways from all of this is that the attacks on encryption schemes are not obvious
-            up
-            front, and the best way to avoid such attacks is to use well known, secure, and carefully designed
-            algorithms
-            written by the people who know the most about modern attacks and how to prevent them.
+            up front, and the best way to avoid such attacks is to use well known, secure, and carefully designed
+            algorithms written by the people who know the most about modern attacks and how to prevent them.
+        </p>
+        <p>
+            Doing all of this using simple encryption methods helps us learn the common ways encryption can fail, as
+            well
+            as ways we can think to solve those problems. However, this also means that we are missing out on many of
+            the protections and nuances developed to protect against the many attacks on encryption.
+        </p>
+        <p>
+            Hopefully this has given you a glimpse of how modern cryptography came to be, and more importantly why it
+            does some of the things it does. I have a lot of fun learning about this sort of history, and I hope you do
+            too.
         </p>
 
-
-        <h1>Old Stuff</h1>
-        <div id="caesar-frequencies" class="graph-example">
-            <div class="labelled-data">
-                <div class="label">Caesar Cipher key</div>
-                <input type="text" value="0" class="data">
-            </div>
-            <div class="graph">
-                <canvas width="400" height="400"></canvas>
-            </div>
-        </div>
-        <h2>Cumulative Vigenère Cipher</h2>
-        <h4>Encrypt</h4>
-        <div id="cumulative-vigenere-encrypt" class="function">
-            <div class="inputs">
-                <div class="input">
-                    Text:<input type="text">
-                </div>
-                <div class="input">
-                    Cipher Word:<input type="text">
-                </div>
-            </div>
-        </div>
-        <h4>Decrypt</h4>
-        <div id="cumulative-vigenere-decrypt" class="function">
-            <div class="inputs">
-                <div class="input">
-                    Text:<input type="text">
-                </div>
-                <div class="input">
-                    Cipher Word:<input type="text">
-                </div>
-            </div>
-        </div>
-        <h2>Rail Fence Cipher</h2>
-        <h4>Encrypt</h4>
-        <div id="rail-fence-encrypt" class="function">
-            <div class="inputs">
-                <div class="input">
-                    Text:<input type="text">
-                </div>
-                <div class="input">
-                    Number of Rails:<input type="number">
-                </div>
-            </div>
-        </div>
-        <h4>Decrypt</h4>
-        <div id="rail-fence-decrypt" class="function">
-            <div class="inputs">
-                <div class="input">
-                    Text:<input type="text">
-                </div>
-                <div class="input">
-                    Number of Rails:<input type="number">
-                </div>
-            </div>
-        </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.1/chart.min.js"></script>
     <script src="crypto.js"></script>

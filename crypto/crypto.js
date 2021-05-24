@@ -523,13 +523,8 @@ function splitText(text, modulo) {
 setTimeout(() => {
   new Function("vigenere-encrypt", vigenereEncrypt);
   new Function("vigenere-decrypt", vigenereDecrypt);
-  new Function("rail-fence-encrypt", railFenceEncrypt);
-  new Function("rail-fence-decrypt", railFenceDecrypt);
   new Function("caesar-interactive", caesarCipher);
   new Function("caesar-decrypt", caesarDecrypt);
-  new Graph("caesar-frequencies", (inputs) => {
-    return getFrequencies(caesarCipher([appleWikipediaText].concat(inputs)));
-  });
   new Graph(
     "english-frequencies",
     () => englishFrequencies,
