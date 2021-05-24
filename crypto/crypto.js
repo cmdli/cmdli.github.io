@@ -58,6 +58,7 @@ class Function {
   }
 
   update() {
+    console.trace();
     const inputValues = Array.from(this.inputs).map((input) => input.value);
     this.output.textContent = this.func(inputValues);
   }
@@ -521,6 +522,7 @@ function splitText(text, modulo) {
 }
 
 setTimeout(() => {
+  console.log("Startup");
   new Function("vigenere-encrypt", vigenereEncrypt);
   new Function("vigenere-decrypt", vigenereDecrypt);
   new Function("caesar-interactive", caesarCipher);

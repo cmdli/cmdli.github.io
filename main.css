@@ -26,6 +26,10 @@ h5 {
 .info {
   flex: 2;
 }
-a:hover() {
+.content a {
+  color: black;
+  text-decoration: none;
+}
+.content a:hover() {
   color: gray;
 }

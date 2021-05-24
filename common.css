@@ -25,13 +25,6 @@ body {
   display: flex;
   flex-direction: column;
 }
-.content a {
-  color: black;
-  text-decoration: none;
-}
-.content a:hover() {
-  color: gray;
-}
 .subtitle {
   font-style: italic;
   font-size: 1rem;

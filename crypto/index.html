@@ -56,13 +56,15 @@
             </div>
         </div>
         <p>
-            The <strong>Caesar Cipher</strong> is one of the oldest and simplest methods of encryption. The basic
+            The <a href="https://en.wikipedia.org/wiki/Caesar_cipher">Caesar Cipher</a> is one of the oldest and
+            simplest methods of encryption. The basic
             concept is
             incredibly
             simple; just take each letter and shift it up or down the alphabet by a known number of places.
         </p>
         <p>
-            For example, shifting forward by three means A becomes D, G becomes J, M becomes P. To get the original
+            For example, shifting forward by three means <em>A</em> becomes <em>D</em>, <em>G</em> becomes <em>J</em>,
+            <em>M</em> becomes <em>P</em>. To get the original
             message,
             just move
             back down the alphabet by the same number. The resulting message doesn't resemble the original at all. Easy,
@@ -139,20 +141,20 @@
             even
             small enough to
             be broken by hand. So, how can we increase the size of our key space so an attacker can’t simply try all
-            combinations?
-        </p>
+            the keys?
         </p>
         <h2>State of the Art (for the 16th century): The Vigenère Cipher</h2>
         <p>
-            The Vigenère cipher, named after Blase de Vigenère, was invented by Giovan Battista Bellaso in 1553 and
-            could
-            not be cracked for 300 years. The improvement on the Caesar cipher is relatively simple.
+            The <a href="https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher">Vigenère cipher</a> is named after Blase de
+            Vigenère, but was actually invented by Giovan
+            Battista Bellaso
+            in 1553 and could not be cracked for 300 years. The improvement on the Caesar cipher is relatively simple.
         </p>
         <p>
             Instead of shifting all the letters by the same amount, why not shift each letter by a different amount? If
             every letter shifts by a different amount, it becomes impossible to tell what the original letter was
             without
-            knowing how it was shifted.
+            knowing how much it was shifted.
         </p>
         <div class="image">
             <img src="images/random-keys.png" />
@@ -167,17 +169,19 @@
             a relatively small key.
         </p>
         <p>
-            In practice, this set of shifts is represented by a simple, easy to remember word. Each letter in the word
-            corresponds to a shift equal to that letter’s place in the alphabet. For example, the letter A means to
+            This set of shifts is represented by a simple, easy to remember word. Each letter in the word
+            corresponds to a shift equal to that letter’s place in the alphabet. For example, the letter <em>A</em>
+            means to
             shift by
-            0 (keeping the original letter), the letter D means to shift by 3, and so on.
+            0 (keeping the original letter), the letter <em>D</em> means to shift by 3, and so on.
         </p>
         <div class="image">
             <img src="images/lemon-key.png" />
             <p>Every letter represents a shift</p>
         </div>
         <p>
-            If the key word is LEMON, then you would shift the first letter of the plaintext by 11, the second letter by
+            If the key word is <em>LEMON</em>, then you would shift the first letter of the plaintext by 11, the second
+            letter by
             4,
             the third letter by 12, and so on. The key point here is that we repeat the keyword to encrypt every section
             of
@@ -388,8 +392,9 @@
             we might not even have enough text to make an accurate guess.
         </p>
         <p>
-            However, the point of an attack on encryption is not to break it in one step, but to <em>make it easier to
-                break</em>.
+            However, the point of an attack on encryption is not to break it in one step, but to <strong>make it easier
+                to
+                break</strong>.
             Simply gaining partial knowledge of the key word or the plaintext is enough to allow us to test multiple
             likely
             options
@@ -427,19 +432,17 @@
             each application using substituion and permutation ciphers.
         </p>
         <p>
-            A <strong>substitution cipher</strong> swaps out
-            blocks of text
-            in a deterministic way, where changing one letter of the input block changes multiple letters of the output
-            block. A <strong>permutation cipher</strong> then swaps those blocks around in the input, so the next
-            application of the key
-            will apply to completely new parts of the text.
+            The <strong>substitution cipher</strong> swaps out each block of text with a new block, where changing
+            one letter of
+            the input block changes multiple letters of the output block. The <strong>permutation cipher</strong> then
+            swaps those blocks
+            around in the input, so the next application of the key will apply to different parts of the text.
         </p>
         <p>
             This network satisfies both confusion and diffusion, because the substitution cipher causes every letter of
-            our output to depend on multiple input letters and the permutation cipher causes every letter to depend on
-            multiple parts of the key. Both of these properties help prevent frequency analysis and other forms of
-            attacks
-            because there is less of an obvious relation between the two.
+            our output to depend on multiple letters of the input and the permutation cipher causes every letter to
+            depend on multiple parts of the key. Both of these properties help prevent frequency analysis and other
+            forms of attacks because there is less of an obvious relation between the ciphertext and the inputs.
         </p>
         <p>
             So, what ciphers can we use for this? One simple permutation cipher we can use is the Rail Fence cipher,
@@ -456,12 +459,9 @@
         </div>
         <p>
             A simple substiution cipher we can use is just to shift every letter in the message by the letter preceding
-            it.
-            This means that at every step, every output letter will depend on two input letters, and since we are
-            applying
-            it multiple times the output letter will end up depending on many input letters. This is fairly weak on its
-            own,
-            but it can also be easily computed by hand.
+            it. This means that at every step, every output letter will depend on two input letters, and since we are
+            applying it multiple times every output letter will end up depending on many input letters. This is also
+            fairly weak on its own, but it can be easily computed by hand.
         </p>
         <div class="image">
             <img src="images/substitution-cipher.png" />
@@ -474,6 +474,10 @@
             and
             our SP-network obscures the relation between our ciphertext and the key or plaintext.
         </p>
+        <div class="image">
+            <img src="images/network-diagram.png" height="500" />
+            <p>Repeated applications</p>
+        </div>
         <div class="example image">
             <div id="network-frequencies" class="graph-example">
                 <div class="labelled-data">
@@ -507,7 +511,7 @@
         </p>
         <p>
             Hopefully this has given you a glimpse of how modern cryptography came to be, and more importantly why it
-            does some of the things it does. I have a lot of fun learning about this sort of history, and I hope you do
+            does some of the things it does. I have a lot of reasoning through these sort of problems, and I hope you do
             too.
         </p>
 
