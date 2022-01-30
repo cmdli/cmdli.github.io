@@ -15,21 +15,17 @@ h5 {
   line-height: 1.2;
 }
 .picture {
-  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 1;
   margin-right: 2em;
   border-radius: 5px;
 }
 .picture img {
   width: 240px;
   height: 320px;
+  border-radius: 5px;
 }
 .info {
-  flex: 2;
-}
-.content a {
-  color: black;
-  text-decoration: none;
-}
-.content a:hover() {
-  color: gray;
+  flex: 1;
 }
