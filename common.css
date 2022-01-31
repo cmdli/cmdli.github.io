@@ -21,6 +21,9 @@ body {
 .titlebar div {
   display: flex;
 }
+.home-link {
+  font-weight: bold;
+}
 
 .content {
   margin: 40px auto;
