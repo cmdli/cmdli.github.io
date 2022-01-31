@@ -1,16 +1,25 @@
 body {
-  font-family: "Open Sans", "Arial", sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
   font-size: 1.2rem;
   background-color: #f3f3f3;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.main {
+  max-width: 1400px;
+  flex-grow: 1;
 }
 
 .titlebar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-weight: bold;
 }
 .titlebar a {
-  color: #333333;
+  color: #222222;
   font-size: 1.25rem;
   margin: 1rem 1rem;
   text-decoration: none;
@@ -26,7 +35,7 @@ body {
 }
 
 .content {
-  margin: 40px auto;
+  margin: 60px auto;
   line-height: 1.4;
   max-width: 700px;
   display: flex;
