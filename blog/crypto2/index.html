@@ -4,39 +4,45 @@
 <head>
     <title>Cryptography from the Ground Up, Part 2</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat">
-    <link rel="stylesheet" href="../common.css">
+    <link rel="stylesheet" href="/common.css">
     <meta charset="utf-8">
 </head>
 
 <body>
-    <div class="titlebar">
-        <a class="home-link" href="/">Chris de la Iglesia</a>
-        <div>
-            <a href="/">Home</a>
-            <a href="/blog">Blog</a>
-            <a href="https://github.com/cmdli">Github</a>
+    <div class="main">
+        <div class="titlebar">
+            <a class="home-link" href="/">Chris de la Iglesia</a>
+            <div>
+                <a href="/">Home</a>
+                <a href="/blog">Blog</a>
+                <a href="https://github.com/cmdli">Github</a>
+            </div>
         </div>
-    </div>
 
-    <div class="content">
-        <h1>Hashing</h1>
-        <div id="basic-hash">
-            <input>
-            <canvas width="400" height="400"></canvas>
+        <div class="content">
+            <h1>Hashing</h1>
+            <div id="basic-hash">
+                <div>Basic Hash</div>
+                <input>
+                <canvas width="400" height="400"></canvas>
+            </div>
+            <div id="long-xor-hash">
+                <div>Long XOR</div>
+                <canvas width="400" height="400"></canvas>
+            </div>
+            <div id="bit-decay">
+                <div>Bit Decay</div>
+                <input>
+                <canvas width="400" height="400"></canvas>
+            </div>
+            <div id="simple-abcd-hash">
+                <div>Simple ABCD</div>
+                <input>
+                <canvas width="400" height="400"></canvas>
+            </div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.1/chart.min.js"></script>
+            <script src="crypto2.js"></script>
         </div>
-        <div id="long-xor-hash">
-            <canvas width="400" height="400"></canvas>
-        </div>
-        <div id="bit-decay">
-            <input>
-            <canvas width="400" height="400"></canvas>
-        </div>
-        <div id="simple-abcd-hash">
-            <input>
-            <canvas width="400" height="400"></canvas>
-        </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.1/chart.min.js"></script>
-        <script src="crypto2.js"></script>
     </div>
 
 </body>
